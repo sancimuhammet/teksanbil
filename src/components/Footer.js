@@ -3,7 +3,8 @@ import React from "react";
 function Footer() {
   return (
     <footer className="footer">
-      <p>&copy; 2025 Teksanbil. Tüm hakları saklıdır.</p>
+      <p>&copy; 2025 Teksanbil. Tüm hakları saklıdır.
+      </p>
     </footer>
   );
 }

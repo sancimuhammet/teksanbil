@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Stories from "./pages/Stories";
 import Contact from "./pages/Contact";
+import './App.css'; // CSS dosyasını import edin
 
 function App() {
   return (

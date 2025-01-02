@@ -3,78 +3,62 @@ body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
-  color: #333;
-  line-height: 1.6;
+  background-color: #c3d4c3; /* Krem rengi arka plan */
+  color: #333; /* Koyu gri yazı */
+  line-height: 2.0;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-  transition: color 0.3s ease-in-out;
-}
-
-a:hover {
-  color: #6200ea;
-}
-
-/* Header */
+/* Header (Üst Container) */
 .header {
-  background: #6200ea; /* Mor tonlarında modern bir renk */
-  color: white;
+  background: #333030; /* Siyah arka plan */
+  color: #f3ebeb; /* Beyaz metin */
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hafif gölge */
 }
 
 .header h1 {
   font-size: 1.8rem;
   margin: 0;
+  color: #fff; /* Beyaz başlık */
 }
 
 .header nav ul {
   list-style: none;
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .header nav li {
   font-weight: bold;
 }
 
+.header nav a {
+  color: #fff; /* Beyaz linkler */
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
 .header nav a:hover {
-  color: #ffab40; /* Turuncu hover efekti */
+  color: #ae75bd; /* Turuncu hover efekti */
 }
 
 /* Footer */
 .footer {
-  background: #333;
+  background: #333; /* Koyu renk footer */
   color: white;
   text-align: center;
   padding: 1.5rem 0;
   margin-top: 2rem;
   font-size: 0.9rem;
-  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Ana İçerik */
 main {
   padding: 2rem;
-}
-
-.home, .about, .stories, .contact {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-h2 {
-  font-size: 2rem;
-  color: #6200ea;
-  border-bottom: 2px solid #ffab40;
-  display: inline-block;
-  margin-bottom: 1rem;
 }
 
 /* Story Card */
@@ -84,7 +68,7 @@ h2 {
   padding: 1rem;
   margin: 1rem 0;
   background: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hafif gölge */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -97,17 +81,17 @@ h2 {
 .story-card h3 {
   font-size: 1.5rem;
   margin: 0.5rem 0;
-  color: #333;
+  color: #333; /* Koyu metin */
 }
 
 .story-card p {
   font-size: 1rem;
-  color: #666;
+  color: #666; /* Açık gri metin */
 }
 
 .story-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Form ve İletişim (Contact Page için) */
@@ -128,13 +112,13 @@ h2 {
 
 .contact input:focus,
 .contact textarea:focus {
-  border-color: #6200ea;
+  border-color: #5c6bc0; /* Soft mavi odaklanma rengi */
   outline: none;
-  box-shadow: 0 0 4px rgba(98, 0, 234, 0.5);
+  box-shadow: 0 0 4px rgba(92, 107, 192, 0.5);
 }
 
 .contact button {
-  background: #6200ea;
+  background: #5c6bc0; /* Soft mavi buton rengi */
   color: white;
   border: none;
   padding: 0.8rem 1.5rem;
@@ -145,7 +129,7 @@ h2 {
 }
 
 .contact button:hover {
-  background: #ffab40;
+  background: #3f51b5; /* Daha koyu mavi hover efekti */
 }
 
 /* Responsive Tasarım */
@@ -162,4 +146,11 @@ h2 {
   h2 {
     font-size: 1.8rem;
   }
+}
+
+.story-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 15px;
 }

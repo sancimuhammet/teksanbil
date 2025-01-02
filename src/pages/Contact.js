@@ -5,8 +5,9 @@ function Contact() {
     <div className="contact">
       <h2>İletişim</h2>
       <p>
-        İletişime geçmek için bize e-posta gönderin: contact@teksanbil.com
+        İletişime geçmek için bize e-posta gönderin: teksanbil@gmail.com
       </p>
+      <p></p>
     </div>
   );
 }
