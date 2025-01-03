@@ -14,7 +14,7 @@
 }
 
 .story-image {
-  width: 50%; /* Fotoğrafın genişliğini %100 yaparak, container'ın genişliğine göre ayarlanmasını sağlar */
+  width: 100%; /* Fotoğrafın genişliğini %100 yaparak, container'ın genişliğine göre ayarlanmasını sağlar */
   max-width: 200px; /* Fotoğrafın maksimum genişliğini ayarlayabilirsiniz */
   height: auto; /* Yükseklik oranı korunarak fotoğrafın yüksekliği otomatik olarak ayarlanır */
   border-radius: 8px;
