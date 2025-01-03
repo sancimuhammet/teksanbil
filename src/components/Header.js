@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 function Header() {
   return (
     <header className="header">
+      <ul>
+        <li>Teknoloji Sanat Bilim</li>
+        </ul>
       <h1>TEKSANBİL</h1>
+      
       <nav>
         <ul>
           <li><Link to="/">Ana Sayfa</Link></li>

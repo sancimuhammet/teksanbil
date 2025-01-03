@@ -1,31 +1,38 @@
 import React, { useState } from 'react'; // useState'i burada import ediyoruz
 import './Home.css';
-
 const Home = () => {
   const stories = [
 {
       id: 1,
-      title: "Ofansif Defansın Keşfi: Langırt'ın Stratejik Devrimi",
+      title: "Anka Kuşu: Yeniden Doğmak ",
       
-      description: `2024 yılı Ekim ayında, askerlik sürecinde, langırt masasında gerçekleşen bir gelişme, oyunun temel kurallarını yeniden şekillendirecek şekilde tarihe geçti. Bu buluş, langırt dünyasında sessiz sedasız devrim yaratmış ve strateji oyunlarına bambaşka bir boyut kazandırmıştır.
+      description: `Bir kuş düşünün... Hayır, daha çok bir fikir aslında. Anka kuşu dediğimiz şey, sadece mitolojik bir varlık değil; insanoğlunun kendini anlamaya çalıştığı en eski simgelerden biri. Yeniden doğuşu, değişimi ve devam etmeyi anlatır. Ama bu fikir, sadece bir masal mı? Yoksa bizim hayatımızdaki bir gerçeğin metaforu mu?
 
-Birçok insan için langırt, sadece basit bir eğlence aracıdır; ancak bazıları için, bu tahtada şekillenen her hareket, derin bir stratejik anlam taşır. İşte bu noktada, "Ofansif Defans" kavramı doğdu. Bu kavram, ilk kez Muhammet Şancı ve M. Ali Evrankaya'nın 301 Sami Özer ve Ömer Altaya karşı oluşturdukları takım tarafından keşfedildi.
+Anka kuşunun hikayesini bir kenara bırakalım ve kendimize dönelim. Hepimizin hayatında “yıkıldığımız” anlar vardır, değil mi? İşte tam da o anlarda Anka kuşunun efsanesi bize bir şey fısıldar: “Yıkım, bir son değildir; yeni bir başlangıçtır.”
 
-Bu yeni strateji, savunmanın ötesine geçerek, defans oyuncusunun aktif şekilde hücum yapabilme yeteneğini ortaya koyuyordu. Geleneksel langırt stratejilerinde defans oyuncusu, sadece rakiplerin topunu engellemeye çalışır. Ancak "Ofansif Defans"ta, defans oyuncusunun amacı yalnızca topu savunmak değil, aynı zamanda topu rakip kaleye yönlendirmektir. Bu yaklaşım, yalnızca savunma değil, aynı zamanda stratejik bir hücum biçimi olarak da işlev görüyordu.
+Bilim de bunu söylüyor. Bir düşünün, yıldızlar nasıl oluşur? Evrende, devasa bir yıldız patlar, bir süpernova olur ve bu patlamadan kalan parçalar, yeni yıldızların ve gezegenlerin yapı taşlarını oluşturur. Evrendeki bu büyük döngü, Anka kuşunun hikayesini bilimsel bir gerçeklik gibi gözler önüne serer.
 
-Bu devrimsel strateji, ilk başta arkadaşlar tarafından şaşkınlıkla karşılandı. Ancak zamanla, Sami Özer ve Ömer Altaya'nın karşısında elde edilen sürekli zaferlerle birlikte, bu strateji langırt tarihindeki önemli bir dönüm noktasını işaret etti. Muhammet Şanci'nin "ofansif defans" yaklaşımını benimsemesi, sadece oyun içindeki zaferleri değil, aynı zamanda askerliğin stresli ortamında arkadaşlar arasında bir bağ oluşturdu.
+Peki ya insana bakalım. Beynimiz, büyük bir travma sonrası bile kendini yeniden yapılandırabilir. Buna nöroplastisite diyoruz. Eski bağlantılar kopar, ama bu kopuştan sonra yeni yollar ortaya çıkar. İnsan, kelimenin tam anlamıyla, küllerinden doğabilir.
 
-O esnada orada bulunan arkadaşları Serdar Abi, Muharrem Dayı, son sigara bükücü Ali, Mehmet Hoca, Ümit Bey ve niceleri bu anlara şahit olmuştu. Ve tabi ki kara gölge Harun Erende oradaydı. Her biri, bu anın tarihsel önemine tanıklık etti ve langırt tahtasında gerçekleşen bu stratejik devrimi gözler önüne serdi.
+Anka kuşunun sırrı burada gizli. Bu hikaye, sadece bir efsane değil; bizim dünyamızda da yankı bulan bir gerçek. Yeniden başlamayı, değişimi ve vazgeçmemeyi hatırlatır. Ve aslında bize şunu söyler: "Bir şeyin sonu, başka bir şeyin başlangıcıdır."
 
-Bu keşif, langırt masasında sadece oyun oynamaktan çok daha fazlasını ifade ediyordu. "Ofansif Defans" stratejisi, her hamlede mantıklı bir düşünme, hızlı tepki verme ve en önemlisi yaratıcı bir strateji geliştirme becerilerini ön plana çıkarıyordu. Muhammet Şanci'nin bu stratejiyi keşfetmesi ve ardından uygulaması, langırtın yalnızca eğlencelik bir oyun değil, aynı zamanda bir düşünce ve strateji becerisi geliştirme alanı olduğunu gözler önüne serdi.
-
-Bugün, "Ofansif Defans", langırtın yalnızca kurallarına değil, aynı zamanda stratejisine de yön veren bir terim olarak kabul edilmektedir. Langırt tahtasında savunma yaparken aynı anda hücum etme yeteneği, langırtın "hızlı düşünme" gerektiren yapısını bir üst seviyeye taşıyan bir gelişme olarak tarihe geçmiştir.`,
+Belki de Anka kuşu, dışarıda değil, hepimizin içinde. Her düştüğümüzde, her kaybettiğimizde ve her yeniden başladığımızda... İçimizdeki o ateşin küllerinden yeni bir umut filizlenir. Bu yüzden Anka kuşu, aslında bizim hikayemizdir.`,
       Image: "/public/images/langirt.png"
     },
     {
         id: 2,
-        title: "Kahramanın Yolculuğu: Bir Bilgisayar Oyununun Anatomisi",
-        description: `Yakında sizlerle...` // kısa versiyon
+        title: "Kuantum: Bir Bilgisayar Anatomisi",
+        description: `Hayal edin, aynı anda hem kapalı hem de açık olabilen bir kutu. Bu, Schrödinger’in kedisinden esinlenmiş bir gerçeklik; ama bu kez kutunun içinde bir bilgisayar var!
+
+Kuantum bilgisayarlar, klasik bilgisayarların asla erişemeyeceği bir hızda işlem yapabiliyor. Bunun sırrı, "bit" yerine "kübit" dediğimiz birimleri kullanmalarında gizli. Kübitler, aynı anda hem 0 hem de 1 olabiliyor—tıpkı bir dalganın hem yukarı hem aşağı hareket etmesi gibi. Bu yetenek, "süperpozisyon" denilen kuantum dünyasının sihrinden geliyor.
+
+Ancak iş bununla bitmiyor. Kuantum dolanıklık sayesinde, birbirine ışık yılları uzaklıkta iki kübit bile eşzamanlı olarak tepki verebiliyor. Einstein’ın bile "ürkütücü" bulduğu bu fenomen, kuantum bilgisayarları inanılmaz kılıyor.
+
+Şimdi bir senaryo düşünelim: Süper karmaşık bir molekülün özelliklerini anlamak istiyorsunuz. Klasik bilgisayarların bu hesaplamayı tamamlaması yıllar alabilir. Ama bir kuantum bilgisayar? Birkaç saniyede yapabilir. İşte bu yüzden bilim insanları, kuantum bilgisayarların ilaç geliştirme, yapay zeka ve enerji yönetimi gibi alanlarda devrim yaratacağını düşünüyor.
+
+Kuantum bilgisayarları basitçe tarif etmek gerekirse; klasik bilgisayarların son model spor arabası olduğunu düşünün. Kuantum bilgisayar ise ışık hızında hareket eden bir uzay gemisi!
+
+Peki ya bu uzay gemisi tamamen işlevsel hale geldiğinde? Belki de bir gün, evrenin sırlarını çözmek için onu kullanacağız.` // kısa versiyon
         
       },
       // Diğer hikayeler
