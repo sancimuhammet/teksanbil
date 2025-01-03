@@ -7,8 +7,7 @@ function Header() {
       <ul>
         <li>Teknoloji Sanat Bilim</li>
         </ul>
-      <h1>   TEKSANBİL</h1>
-      <h2>Teknoloji Sanat Bilim</h2>      
+      <h1>   TEKSANBİL</h1>      
       <nav>
         <ul>
           <li><Link to="/">Ana Sayfa</Link></li>
