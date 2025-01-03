@@ -1,61 +1,65 @@
 .home {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: f8f8f8(183 76% 11%);
-  }
-  .story-image {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 10px;
-  }
-  
-  .story {
-    background-color: #a0a390;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 10px 0;
-    box-shadow: 0 2px 5px rgba(8, 5, 5, 0.1);
-  }
-  
-  .story-title {
-    font-size: 1.5em;
-    color: #000000;
-    font-weight: bold;
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f8f8f8; /* Sayfanın genel arka plan rengi */
+}
 
-  
-  .story-description {
-    font-size: 1em;
-    color: #000000;
-  }
-  
-  .read-more-btn {
-    background-color: #576959;
-    color: rgb(255, 255, 255);
-    border: none;
-    padding: 10px 20px;
-    margin-top: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .read-more-btn:hover {
-    background-color: #9b4db3;
-  }
-  
+.story {
+  background-color: #ffffff; /* Her hikayenin arka planı beyaz olacak */
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px 0;
+  box-shadow: 0 2px 5px rgba(8, 5, 5, 0.1);
+}
+
+.story-image {
+  width: 50%; /* Fotoğrafın genişliğini %100 yaparak, container'ın genişliğine göre ayarlanmasını sağlar */
+  max-width: 200px; /* Fotoğrafın maksimum genişliğini ayarlayabilirsiniz */
+  height: auto; /* Yükseklik oranı korunarak fotoğrafın yüksekliği otomatik olarak ayarlanır */
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+
+.story-title {
+  font-size: 2.5em;
+  color: #000000;
+  font-weight: bold;
+  margin-top: 0; /* Başlık ile içerik arasındaki boşluğu sıfırlama */
+}
+
+.story-description {
+  font-size: 1em;
+  color: #000000;
+  line-height: 1.5; /* Okunabilirlik için satır yüksekliği */
+  margin-bottom: 20px; /* Metin ile buton arasındaki boşluk */
+}
+
+.read-more-btn {
+  background-color: #576959;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.read-more-btn:hover {
+  background-color: #9b4db3;
+}
 
 .author {
-  text-decoration: underline;
-  display: inline-flex;
-  align-items: center;
-  font-style: italic;
+ 
+  font: 15x"inter var", apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: #333;
+  margin-bottom: 10px; /* Yazar adı ile başlık arasındaki boşluk */
+  display: block;
 }
 
 .icon {
   margin-left: 8px;
   font-size: 1.2em;
 }
-

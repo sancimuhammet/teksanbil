@@ -1,0 +1,62 @@
+/* Genel Header Stilleri */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .logo-container {
+    margin-bottom: 10px; /* Daha yakın olması için mesafeyi küçülttüm */
+  }
+  
+  h1 {
+    font-size: 3em;
+    margin: 0;
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+  
+  .tagline {
+    font-size: 1.2em;
+    font-weight: normal;
+    margin-top: 5px;
+    letter-spacing: 1px;
+    color: #f8f8f8;
+  }
+  
+  .line {
+    width: 60%; /* Beyaz çizginin genişliği */
+    height: 2px;
+    background-color: #fff;
+    margin: 10px 0;
+  }
+  
+  nav {
+    margin-top: 20px;
+  }
+  
+  .nav-list {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .nav-list li {
+    font-size: 1.1em;
+  }
+  
+  .nav-list a {
+    text-decoration: none;
+    color: #f8f8f8;
+    transition: color 0.3s;
+  }
+  
+  .nav-list a:hover {
+    color: #fecd53;
+  }
+  

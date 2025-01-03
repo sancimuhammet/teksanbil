@@ -63,11 +63,11 @@ main {
 
 /* Story Card */
 .story-card {
-  border: 1px solid #a79c9c;
+  border: 1px solid #ffffff;
   border-radius: 8px;
   padding: 1rem;
   margin: 1rem 0;
-  background: #a0a390;
+  background: #fdfdfd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hafif gölge */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
