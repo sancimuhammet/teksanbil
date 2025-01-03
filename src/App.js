@@ -6,16 +6,16 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Stories from "./pages/Stories";
 import Contact from "./pages/Contact";
-import './App.css'; // CSS dosyasını import edin
+import './App.css'; // Genel stilleri yükleme
 
 function App() {
   return (
     <Router>
       <div className="app">
-        {/* Header her sayfada gösterilir */}
+        {/* Sayfanın üst kısmında Header bileşeni */}
         <Header />
-        <main>
-          {/* Sayfa geçişlerini buradan kontrol ediyoruz */}
+        <main className="main-content">
+          {/* Uygulamanın farklı sayfalarına yönlendirme */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
@@ -23,7 +23,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
-        {/* Footer her sayfada gösterilir */}
+        {/* Sayfanın alt kısmında Footer bileşeni */}
         <Footer />
       </div>
     </Router>
