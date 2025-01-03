@@ -1,26 +1,30 @@
 import React, { useState } from 'react'; // useState'i burada import ediyoruz
 import './Home.css';
+
 const Home = () => {
   const stories = [
 {
       id: 1,
-      title: "Anka Kuşu: Yeniden Doğmak ",
-      
-      description: `Bir kuş düşünün... Hayır, daha çok bir fikir aslında. Anka kuşu dediğimiz şey, sadece mitolojik bir varlık değil; insanoğlunun kendini anlamaya çalıştığı en eski simgelerden biri. Yeniden doğuşu, değişimi ve devam etmeyi anlatır. Ama bu fikir, sadece bir masal mı? Yoksa bizim hayatımızdaki bir gerçeğin metaforu mu?
+      author:"Muhammet Şanci",
+      title: "Hayal Kırıklığının Yankısı ",
+      image: "/hayal.webp" ,
+      description: `Bir zamanlar umutla yeşeren topraklarda, her şeyin mümkün olduğu o sınırsız diyarlarda, bir hikaye başlar. İnsan, sonsuz ihtimallerin büyüsüne kapılır, hayalleriyle göğe uzanır. Ancak zaman, o cömert ellerini birden geri çeker. Hayaller, kırılan cam parçaları gibi yere saçılır ve insan, kanayan elleriyle onları toplamaya çalışır.
 
-Anka kuşunun hikayesini bir kenara bırakalım ve kendimize dönelim. Hepimizin hayatında “yıkıldığımız” anlar vardır, değil mi? İşte tam da o anlarda Anka kuşunun efsanesi bize bir şey fısıldar: “Yıkım, bir son değildir; yeni bir başlangıçtır.”
+Hayal kırıklığı, soğuk bir rüzgâr gibi eser yüreklerde. İlk başta hafif bir serinlik gibi gelir; dayanılır sanırsınız. Ama o rüzgâr şiddetlenir, her şeyi savurur. Tüm anlamlar bir anda boşluğa düşer. İnsan, kendi hayalinin enkazında bir yabancıya dönüşür.
 
-Bilim de bunu söylüyor. Bir düşünün, yıldızlar nasıl oluşur? Evrende, devasa bir yıldız patlar, bir süpernova olur ve bu patlamadan kalan parçalar, yeni yıldızların ve gezegenlerin yapı taşlarını oluşturur. Evrendeki bu büyük döngü, Anka kuşunun hikayesini bilimsel bir gerçeklik gibi gözler önüne serer.
+"Niye?" diye sorarsınız, ama cevap bulamazsınız. Çünkü bazen evren, sessiz kalmayı tercih eder. Kırılan parçalar, yeniden bir araya gelmeyecek kadar keskindir. İşte o an anlarsınız: Bu hikaye, baştan sona bir yanılgıymış.
 
-Peki ya insana bakalım. Beynimiz, büyük bir travma sonrası bile kendini yeniden yapılandırabilir. Buna nöroplastisite diyoruz. Eski bağlantılar kopar, ama bu kopuştan sonra yeni yollar ortaya çıkar. İnsan, kelimenin tam anlamıyla, küllerinden doğabilir.
+Artık umut etmek yorucudur. Beklentiler, zincirlere dönüşmüştür. Gözlerinizi kapatır ve teslim olursunuz. Vazgeçmek, bir kabulleniş gibi gelir sonunda. Hayat, cevap vermiyorsa belki de yanlış sorular soruluyordur.
 
-Anka kuşunun sırrı burada gizli. Bu hikaye, sadece bir efsane değil; bizim dünyamızda da yankı bulan bir gerçek. Yeniden başlamayı, değişimi ve vazgeçmemeyi hatırlatır. Ve aslında bize şunu söyler: "Bir şeyin sonu, başka bir şeyin başlangıcıdır."
+Ama işin en acı yanı şudur: Hayal kırıklığı, insana her şeyi sorgulatırken geriye tek bir cevap bırakır — hiçbir şey. Ve bazen bu "hiçlik", her şeyin ötesinde bir rahatlık sunar.
 
-Belki de Anka kuşu, dışarıda değil, hepimizin içinde. Her düştüğümüzde, her kaybettiğimizde ve her yeniden başladığımızda... İçimizdeki o ateşin küllerinden yeni bir umut filizlenir. Bu yüzden Anka kuşu, aslında bizim hikayemizdir.`,
-      Image: "/public/images/langirt.png"
+Sonunda, o derin sessizlikte, insan bir fısıltı gibi mırıldanır:
+"Belki de en büyük özgürlük, artık hiçbir şey beklememektir`,
     },
     {
         id: 2,
+        image:"/kuantum bilgisayar.png",
+        author:"Muhammet Şanci",
         title: "Kuantum: Bir Bilgisayar Anatomisi",
         description: `Hayal edin, aynı anda hem kapalı hem de açık olabilen bir kutu. Bu, Schrödinger’in kedisinden esinlenmiş bir gerçeklik; ama bu kez kutunun içinde bir bilgisayar var!
 
@@ -45,22 +49,38 @@ Peki ya bu uzay gemisi tamamen işlevsel hale geldiğinde? Belki de bir gün, ev
     };
   
     return (
-      <div className="home">
-        <h1>Hikayeler</h1>
-        {stories.map(story => (
-          <div key={story.id} className="story">
-            <h2 className="story-title">{story.title}</h2>
-            <p className="story-description">
-              {readMore === story.id ? story.description : `${story.description.substring(0, 150)}...`}
-            </p>
-            {readMore !== story.id && (
-              <button onClick={() => handleReadMore(story.id)} className="read-more-btn">
-                Devamını Oku
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
+<div className="home">
+  <h1>Öne Çıkanlar</h1>
+  {stories.map((story) => (
+    <div key={story.id} className="story">
+      <p className="author">
+        Yazar: {story.author} <span className="icon">✍️</span>
+      </p>
+      <img
+        src={story.image}
+        alt={story.title}
+        className="story-image"
+        style={{ width: "100%", borderRadius: "8px", marginBottom: "10px" }}
+      />
+      <h2 className="story-title">{story.title}</h2>
+      <p className="story-description">
+        {readMore === story.id
+          ? story.description
+          : `${story.description.substring(0, 150)}...`}
+      </p>
+      {readMore !== story.id && (
+        <button
+          onClick={() => handleReadMore(story.id)}
+          className="read-more-btn"
+        >
+          Devamını Oku
+        </button>
+      )}
+    </div>
+  ))}
+</div>
+
+
     );
   };
   

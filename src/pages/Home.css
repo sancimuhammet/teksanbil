@@ -2,30 +2,38 @@
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: hwb(0 100% 0%);
+    background-color: f8f8f8(183 76% 11%);
+  }
+  .story-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
   }
   
   .story {
-    background-color: #fdfdfd;
+    background-color: #a0a390;
     border-radius: 8px;
     padding: 20px;
     margin: 10px 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(8, 5, 5, 0.1);
   }
   
   .story-title {
     font-size: 1.5em;
+    color: #000000;
     font-weight: bold;
   }
+
   
   .story-description {
     font-size: 1em;
-    color: #333;
+    color: #000000;
   }
   
   .read-more-btn {
-    background-color: #329739;
-    color: rgb(247, 247, 247);
+    background-color: #576959;
+    color: rgb(255, 255, 255);
     border: none;
     padding: 10px 20px;
     margin-top: 10px;
@@ -34,14 +42,20 @@
   }
   
   .read-more-btn:hover {
-    background-color: #3a3a44;
+    background-color: #9b4db3;
   }
-  .story {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  margin: 10px 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  
+
+.author {
+  text-decoration: underline;
+  display: inline-flex;
+  align-items: center;
+  font-style: italic;
+  color: #333;
+}
+
+.icon {
+  margin-left: 8px;
+  font-size: 1.2em;
 }
 

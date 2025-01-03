@@ -3,7 +3,7 @@ import StoryCard from "../components/StoryCard";
 
 function Stories() {
   const storyList = [
-    { title: "Rodin ve Düşünen Adam: Taşın İçindeki İnsan", description: `Paris’te bir parkın ortasında, başını ellerine dayamış, derin düşüncelere dalmış bir figür: "Düşünen Adam." Dünyaca ünlü bu heykel, Auguste Rodin’in dehasının ve sanatın derin etkisinin bir simgesidir. Ancak "Düşünen Adam" sadece bir heykel değil; insan zihninin ve varoluşun karmaşıklığını anlatan bir öyküdür.
+    { title: "Rodin ve Düşünen Adam: Taşın İçindeki İnsan", image:"/adam.png", description: `Paris’te bir parkın ortasında, başını ellerine dayamış, derin düşüncelere dalmış bir figür: "Düşünen Adam." Dünyaca ünlü bu heykel, Auguste Rodin’in dehasının ve sanatın derin etkisinin bir simgesidir. Ancak "Düşünen Adam" sadece bir heykel değil; insan zihninin ve varoluşun karmaşıklığını anlatan bir öyküdür.
 
 Rodin, "Düşünen Adam"ı 1880'lerde, büyük bir projenin parçası olarak tasarladı: "Cehennem Kapıları." Bu proje, Dante’nin İlahi Komedya’sından ilham alıyordu. Heykel, aslında Dante’nin bir yansıması olarak yaratılmıştı; cehennem kapısının tepesinde oturup, insanlığın acılarını ve ahlaki ikilemlerini düşünen bir figür.
 
@@ -13,7 +13,7 @@ Peki, taş bir heykel nasıl olur da bu kadar güçlü bir etki yaratabilir? Cev
 "Ben taşları yontmuyorum. Onların içindeki figürü özgür bırakıyorum."
 
 "Düşünen Adam," taşın içinden özgür bırakılmış bir ruhun simgesidir. O, bize düşünmenin, sorgulamanın ve insan olmanın ne anlama geldiğini hatırlatır. Bu heykel, zamanın ve mekanın ötesine geçen bir çağrı yapar: "Kim olduğunuzu ve neden burada olduğunuzu düşünün.` },
-    { title: "Sanatın Gücü", description: "Sanat ve teknoloji nasıl birleşiyor?", image: "/art.jpg" },
+    { title: "Sanatın Gücü", description: "Sanat ve teknoloji nasıl birleşiyor?" },
   ];
 
   return (

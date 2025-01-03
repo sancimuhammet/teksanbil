@@ -3,7 +3,7 @@ body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #c3d4c3; /* Krem rengi arka plan */
+  background-color: #f8f8f873; /* Krem rengi arka plan */
   color: #333; /* Koyu gri yazı */
   line-height: 2.0;
 }
@@ -63,11 +63,11 @@ main {
 
 /* Story Card */
 .story-card {
-  border: 1px solid #ddd;
+  border: 1px solid #a79c9c;
   border-radius: 8px;
   padding: 1rem;
   margin: 1rem 0;
-  background: white;
+  background: #a0a390;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hafif gölge */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -81,12 +81,12 @@ main {
 .story-card h3 {
   font-size: 1.5rem;
   margin: 0.5rem 0;
-  color: #333; /* Koyu metin */
+  color: #030303; /* Koyu metin */
 }
 
 .story-card p {
   font-size: 1rem;
-  color: #666; /* Açık gri metin */
+  color: #000000; /* Açık gri metin */
 }
 
 .story-card:hover {
