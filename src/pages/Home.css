@@ -7,11 +7,13 @@
 
 .story {
   background-color: #ffffff; /* Her hikayenin arka planı beyaz olacak */
-  border-radius: 8px;
-  padding: 20px;
-  margin: 10px 0;
-  box-shadow: 0 2px 5px rgba(8, 5, 5, 0.1);
+  border-radius: 5px;
+  padding: 4px;
+  margin: 1px 0;
+  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+  
 }
+
 
 .story-image {
   width: 100%; /* Fotoğrafın genişliğini %100 yaparak, container'ın genişliğine göre ayarlanmasını sağlar */
