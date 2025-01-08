@@ -13,7 +13,7 @@ Peki, taş bir heykel nasıl olur da bu kadar güçlü bir etki yaratabilir? Cev
 "Ben taşları yontmuyorum. Onların içindeki figürü özgür bırakıyorum."
 
 "Düşünen Adam," taşın içinden özgür bırakılmış bir ruhun simgesidir. O, bize düşünmenin, sorgulamanın ve insan olmanın ne anlama geldiğini hatırlatır. Bu heykel, zamanın ve mekanın ötesine geçen bir çağrı yapar: "Kim olduğunuzu ve neden burada olduğunuzu düşünün.` },
-    { title: "Sanatın Gücü", description: "Sanat ve teknoloji nasıl birleşiyor?" },
+    
   ];
 
   return (

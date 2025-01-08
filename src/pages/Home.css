@@ -16,7 +16,7 @@
 
 
 .story-image {
-  width: 100%; /* Fotoğrafın genişliğini %100 yaparak, container'ın genişliğine göre ayarlanmasını sağlar */
+  width: 50%; /* Fotoğrafın genişliğini %100 yaparak, container'ın genişliğine göre ayarlanmasını sağlar */
   max-width: 200px; /* Fotoğrafın maksimum genişliğini ayarlayabilirsiniz */
   height: auto; /* Yükseklik oranı korunarak fotoğrafın yüksekliği otomatik olarak ayarlanır */
   border-radius: 8px;
@@ -65,3 +65,21 @@
   margin-left: 8px;
   font-size: 1.2em;
 }
+.story-konu{
+  border-radius: 20px; /* Yuvarlak köşeler */
+  padding: 1px 5px; /* Hafif iç boşluk */
+  font-size: 1rem; /* Metin boyutu */
+  font-weight: bold; /* Metni vurgular */
+  color: #555; /* Koyu gri metin rengi */
+  border: 1px solid #ddd; /* Hafif bir çerçeve */
+  display: inline-block; /* Boyutun içeriğe göre ayarlanması */
+  text-align: center; /* Metni ortalar */
+  background-color: #e7e7e7;
+}
+.author{
+  font-style:bold;
+  font-display:flex ;
+  font-weight:800;
+  color: #404444;
+}
+
