@@ -1,7 +1,7 @@
 .home {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 20px;
+  padding: 10px;
   background-color: #f8f8f8; /* Sayfanın genel arka plan rengi */
 }
 
@@ -9,7 +9,7 @@
   background-color: #ffffff; /* Her hikayenin arka planı beyaz olacak */
   border-radius: 5px;
   padding: 4px;
-  margin: 1px 0;
+  margin: 0;
   box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
   
 }
@@ -20,11 +20,12 @@
   max-width: 200px; /* Fotoğrafın maksimum genişliğini ayarlayabilirsiniz */
   height: auto; /* Yükseklik oranı korunarak fotoğrafın yüksekliği otomatik olarak ayarlanır */
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 
 
 .story-title {
+  font-style: bold;
   font-size: 2.5em;
   color: #000000;
   font-weight: bold;
@@ -35,7 +36,7 @@
   font-size: 1em;
   color: #000000;
   line-height: 1.5; /* Okunabilirlik için satır yüksekliği */
-  margin-bottom: 20px; /* Metin ile buton arasındaki boşluk */
+  margin-bottom: 0px; /* Metin ile buton arasındaki boşluk */
 }
 
 .read-more-btn {
