@@ -85,9 +85,31 @@ Peki, taş bir heykel nasıl olur da bu kadar güçlü bir etki yaratabilir? Cev
   ];
 
   const [readMore, setReadMore] = useState(null);
+  const [comments, setComments] = useState({});
+  const [likes, setLikes] = useState({});
 
   const handleReadMore = (id) => {
     setReadMore(readMore === id ? null : id);
+  };
+
+  const handleCommentSubmit = (e, id) => {
+    e.preventDefault();
+    const name = e.target.name.value.trim();
+    const comment = e.target.comment.value.trim();
+    if (name && comment) {
+      setComments((prev) => ({
+        ...prev,
+        [id]: [...(prev[id] || []), { name, comment }],
+      }));
+      e.target.reset();
+    }
+  };
+
+  const handleLike = (id) => {
+    setLikes((prev) => ({
+      ...prev,
+      [id]: (prev[id] || 0) + 1,
+    }));
   };
 
   return (
@@ -97,12 +119,9 @@ Peki, taş bir heykel nasıl olur da bu kadar güçlü bir etki yaratabilir? Cev
           <h2 className="story-title">{story.title}</h2>
           <p className="author">{story.author}</p>
           <p className="story-konu">{story.konu}</p>
-          <p className="story-zaman">
-            📅{story.zaman}
-          </p>
+          <p className="story-zaman">📅{story.zaman}</p>
           <img src={story.image} alt={story.title} className="story-image" />
           <p className="story-description">
-            
             {readMore === story.id
               ? story.description
               : `${story.description.substring(0, 150)}...`}
@@ -113,12 +132,42 @@ Peki, taş bir heykel nasıl olur da bu kadar güçlü bir etki yaratabilir? Cev
           >
             {readMore === story.id ? "Kapat" : "Devamını Oku"}
           </button>
+          {readMore === story.id && (
+            <div className="interactions">
+              <div className="likes">
+                <button onClick={() => handleLike(story.id)}>💖Beğen</button>
+                <span>{likes[story.id ] || " 0 " }    Like💖</span>
+              </div>
+              <div className="comments">
+                <form onSubmit={(e) => handleCommentSubmit(e, story.id)}>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="İsminiz"
+                    required
+                  />
+                  <textarea
+                    name="comment"
+                    placeholder="Yorumunuz"
+                    required
+                  ></textarea>
+                  <button type="submit">Yorum Yap</button>
+                </form>
+                <ul>
+                  {(comments[story.id] || []).map((comment, index) => (
+                    <li key={index}>
+                      <strong>{comment.name}:</strong> {comment.comment}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
           <hr className="divider" />
         </div>
       ))}
     </div>
   );
 };
-
 
 export default Home;
