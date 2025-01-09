@@ -1,128 +1,159 @@
 .home {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 10px;
+  padding: 20px;
   background-color: #f8f8f8; /* Sayfanın genel arka plan rengi */
 }
 
+/* Hikayelerin genel stili */
 .story {
-  background-color: #ffffff; /* Her hikayenin arka planı beyaz olacak */
-  border-radius: 5px;
-  padding: 4px;
-  margin: 0;
-  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
-  
+  background-color: #ffffff;
+  border-radius: 10px; /* Daha yumuşak köşeler */
+  padding: 20px; /* İçerik ile kenar arasındaki boşluk */
+  margin-bottom: 20px; /* Hikayeler arasındaki boşluk */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Daha belirgin ve modern gölge */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover efekti */
 }
 
+.story:hover {
+  transform: translateY(-5px); /* Hikaye üzerine gelindiğinde hafifçe yukarı kayma */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Hover'da daha belirgin gölge */
+}
 
+/* Hikaye görseli */
 .story-image {
-  width: 50%; /* Fotoğrafın genişliğini %100 yaparak, container'ın genişliğine göre ayarlanmasını sağlar */
-  max-width: 200px; /* Fotoğrafın maksimum genişliğini ayarlayabilirsiniz */
-  height: auto; /* Yükseklik oranı korunarak fotoğrafın yüksekliği otomatik olarak ayarlanır */
-  border-radius: 8px;
-  margin-bottom: 0px;
+  width: 100%; /* Fotoğraf genişliğini container'a göre %100 yap */
+  max-width: 300px; /* Fotoğrafın genişliği 300px ile sınırlı */
+  height: auto;
+  border-radius: 10px; /* Yuvarlak köşeler */
+  margin-bottom: 15px; /* Görsel ile başlık arasındaki boşluk */
+  object-fit: cover; /* Fotoğrafın container'a uyumlu şekilde kesilmesi */
 }
 
-
+/* Hikaye başlığı */
 .story-title {
-  font-style: bold;
-  font-size: 2.5em;
-  color: #000000;
+  font-size: 1.6em; /* Başlık boyutunu biraz küçülttüm */
+  color: #333333;
   font-weight: bold;
-  margin-top: 0; /* Başlık ile içerik arasındaki boşluğu sıfırlama */
+  margin-bottom: 10px; /* Başlık ile içerik arasındaki boşluk */
+  line-height: 1.4;
+  text-transform: capitalize; /* Başlıkta her kelimenin ilk harfi büyük */
 }
 
+/* Hikaye açıklaması */
 .story-description {
-  font-size: 1em;
-  color: #000000;
-  line-height: 1.5; /* Okunabilirlik için satır yüksekliği */
-  margin-bottom: 0px; /* Metin ile buton arasındaki boşluk */
+  font-size: 1.1em;
+  color: #555555;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  font-weight: 300; /* Daha hafif yazı tipi */
 }
 
+/* 'Daha fazla oku' butonu */
 .read-more-btn {
   background-color: #576959;
-  color: #fff;
+  color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 12px 25px;
   margin-top: 10px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
+  transition: background-color 0.3s ease;
 }
 
 .read-more-btn:hover {
   background-color: #9b4db3;
+  transform: scale(1.05); /* Hover efektinde butonun büyümesi */
 }
 
+/* Yazar adı */
 .author {
- 
-  font: 15x"inter var", apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: #333;
-  margin-bottom: 10px; /* Yazar adı ile başlık arasındaki boşluk */
-  display: block;
+  font-size: 1em;
+  font-weight: bold;
+  color: #404444;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center; /* Yazar adı ve ikon yan yana */
 }
 
+/* Yazar ikonu */
 .icon {
   margin-left: 8px;
-  font-size: 1.2em;
-}
-.story-konu{
-  border-radius: 20px; /* Yuvarlak köşeler */
-  padding: 1px 5px; /* Hafif iç boşluk */
-  font-size: 1rem; /* Metin boyutu */
-  font-weight: bold; /* Metni vurgular */
-  color: #555; /* Koyu gri metin rengi */
-  border: 1px solid #ddd; /* Hafif bir çerçeve */
-  display: inline-block; /* Boyutun içeriğe göre ayarlanması */
-  text-align: center; /* Metni ortalar */
-  background-color: #e7e7e7;
-}
-.author{
-  font-style:bold;
-  font-display:flex ;
-  font-weight:800;
-  color: #404444;
-}
-.interactions {
-  margin-top: 15px;
-  padding: 10px;
-  border-top: 1px solid #1f1f20;
+  font-size: 1.3em;
+  color: #888;
 }
 
-.comments ul {
-  list-style: square;
-  padding: 0;
-}
-
-.comments form {
-  display: flex;
-  flex-direction: column;
+/* Hikaye konusu (etiket) */
+.story-konu {
+  border-radius: 20px;
+  padding: 5px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  border: 1px solid #ddd;
+  display: inline-block;
+  text-align: center;
+  background-color: #576959; /* Konu etiketinin rengini belirgin hale getirdim */
   margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.story-konu:hover {
+  background-color: #9b4db3; /* Hover'da etiketin rengini değiştir */
+}
+
+/* Etkileşimler kısmı (yorumlar ve beğeniler) */
+.interactions {
+  margin-top: 25px;
+  padding: 15px;
+  border-top: 1px solid #f1f1f1;
+}
+
+/* Yorumlar */
+.comments ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .comments input,
 .comments textarea {
-  margin-bottom: 10px;
-  padding: 8px;
+  margin-bottom: 15px;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
 }
 
+.comments button {
+  background-color: #576959;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1.1em;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.comments button:hover {
+  background-color: #9b4db3;
+}
+
+/* Beğen butonu */
 .likes button {
-  background: #c09624;
+  background-color: #c09624;
   color: white;
   border: none;
-  padding: 8px 15px;
+  padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
 }
 
 .likes button:hover {
-  background: #ff0000;
-}
-.comments button{
-  color:#ffffff;
-  background-color: #576959;
-  font-style: bold;
-  font-weight: 200;
+  background-color: #ff0000;
 }

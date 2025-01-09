@@ -1,4 +1,4 @@
-/* Header genel stili */
+/* Header genel stili */ 
 .header {
   display: flex;
   justify-content: space-between;
@@ -77,7 +77,6 @@
   text-align: left;
 }
 
-
 .nav-list li a:hover {
   background-color: #576959;
   border-radius: 5px;
@@ -96,8 +95,26 @@
   cursor: pointer;
 }
 
-
+/* Menü açıldığında sağdan tamamen görünür */
 .side-menu.open {
-  right: 0; /* Menü açıldığında sağdan tamamen görünür */
+  right: 0;
 }
 
+/* Masaüstü için menü düzeni (Medya sorgusu) */
+@media (min-width: 1024px) {
+  .side-menu {
+    right: 0; /* Menü sağa kaymasın */
+    width: 300px; /* Menü genişliği artırılabilir */
+    flex-direction: column; /* Menü öğeleri alt alta gelsin */
+    align-items: flex-start; /* Öğeler sola hizalanmış kalacak */
+  }
+  
+  .nav-list {
+    padding-left: 0;
+  }
+}
+
+/* Gerekirse aşağıdaki gibi iletişim kısmı görünür hale getirilir */
+.side-menu .contact-section {
+  margin-top: 20px; /* İletişim kısmı için margin ekleyebilirsiniz */
+}
