@@ -145,8 +145,8 @@ Peki, taş bir heykel nasıl olur da bu kadar güçlü bir etki yaratabilir? Cev
           {readMore === story.id && (
             <div className="interactions">
               <div className="likes">
-                <button onClick={() => handleLike(story.id)}>💖 Beğen</button>
-                <span>{likes[story.id] || "0"} Like 💖</span>
+                <button onClick={() => handleLike(story.id)}> Beğen❤️</button>
+                <span>{likes[story.id] || "0"} Like </span>
               </div>
               <div className="comments">
                 <form onSubmit={(e) => handleCommentSubmit(e, story.id)}>
