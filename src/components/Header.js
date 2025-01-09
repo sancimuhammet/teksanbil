@@ -1,23 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Header.css"; // Header için özel stiller
+import "./Header.css";
 
 function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <header className="header">
       <div className="logo-container">
         <h1>TEKSANBİL</h1>
-        <p className="tagline">Teknoloji | Sanat | Bilim</p> {/* Kısaltma gibi görünsün diye */}
+        <p className="tagline">Teknoloji | Sanat | Bilim</p>
       </div>
-      <div className="line"></div> {/* Beyaz çizgi */}
-      <nav>
-        <ul className="nav-list">
-          <li><Link to="/">Ana Sayfa</Link></li>
-          <li><Link to="/about">Hakkında</Link></li>
-          <li><Link to="/stories">Hikayeler</Link></li>
-          <li><Link to="/contact">İletişim</Link></li>
-        </ul>
-      </nav>
+      <button className="menu-button" onClick={toggleMenu}>
+        ☰
+      </button>
+      <div className={`side-menu ${isMenuOpen ? "open" : ""}`}>
+        <button className="close-button" onClick={toggleMenu}>
+          ×
+        </button>
+        <nav>
+          <ul className="nav-list">
+            <li>
+              <Link to="/" onClick={toggleMenu}>Ana Sayfa</Link>
+            </li>
+            <li>
+              <Link to="/about" onClick={toggleMenu}>Hakkında</Link>
+            </li>
+            <li>
+              <Link to="/stories" onClick={toggleMenu}>Hikayeler</Link>
+            </li>
+            <li>
+              <Link to="/contact" onClick={toggleMenu}>İletişim</Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
   );
 }

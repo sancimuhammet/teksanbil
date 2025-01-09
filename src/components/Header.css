@@ -1,62 +1,103 @@
-/* Genel Header Stilleri */
+/* Header genel stili */
 .header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .logo-container {
-    margin-bottom: 10px; /* Daha yakın olması için mesafeyi küçülttüm */
-  }
-  
-  h1 {
-    font-size: 3em;
-    margin: 0;
-    font-weight: bold;
-    letter-spacing: 2px;
-  }
-  
-  .tagline {
-    font-size: 1.2em;
-    font-weight: normal;
-    margin-top: 5px;
-    letter-spacing: 1px;
-    color: #f8f8f8;
-  }
-  
-  .line {
-    width: 60%; /* Beyaz çizginin genişliği */
-    height: 2px;
-    background-color: #fff;
-    margin: 10px 0;
-  }
-  
-  nav {
-    margin-top: 20px;
-  }
-  
-  .nav-list {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    gap: 20px;
-  }
-  
-  .nav-list li {
-    font-size: 1.1em;
-  }
-  
-  .nav-list a {
-    text-decoration: none;
-    color: #f8f8f8;
-    transition: color 0.3s;
-  }
-  
-  .nav-list a:hover {
-    color: #fecd53;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+  position: relative;
+  z-index: 1000;
+}
+
+/* Logo kısmı */
+.logo-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-container h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.logo-container .tagline {
+  font-size: 0.9rem;
+  margin: 0;
+  color: #ddd;
+}
+
+/* Menü butonu (hamburger) */
+.menu-button {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: white;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+/* Yan menü */
+.side-menu {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 250px; /* Menü genişliği */
+  height: 100%;
+  background-color: #444;
+  color: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column; /* İçerik alt alta hizalanır */
+  align-items: flex-start; /* Öğeler sola hizalanır */
+  padding: 20px;
+  overflow-y: auto; /* Taşan içerik için kaydırma eklenir */
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%; /* Liste tam genişlikte olur */
+}
+
+.nav-list li {
+  margin: 10px 0; /* Her öğe arasında boşluk bırakılır */
+}
+
+.nav-list li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding: 10px;
+  display: block; /* Bağlantılar tam genişlikte tıklanabilir */
+  width: 100%;
+  text-align: left;
+}
+
+
+.nav-list li a:hover {
+  background-color: #576959;
+  border-radius: 5px;
+  color: #fff;
+}
+
+/* Kapatma butonu */
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+
+.side-menu.open {
+  right: 0; /* Menü açıldığında sağdan tamamen görünür */
+}
+
