@@ -1,52 +1,74 @@
+/* Tarayıcı varsayılan boşluklarını kaldırın */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ana kapsayıcı stil (Eğer Home.js içinde <main> varsa buna uygulanabilir) */
+main {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0; /* İsteğe bağlı */
+}
+
+/* Home component (Ana hikayeleri kapsayan container) */
 .home {
+  margin: 0;
+  padding: 0;
+  width: 100%; /* Tüm genişlik */
+  height: 100%; /* Tüm yükseklik */
+  overflow-y: auto; /* Taşmaları dikey kaydırma çubuğu ile göster */
+  box-sizing: border-box; /* Padding'i içeride tutar */
+  background-color: #fff; /* İsteğe bağlı */
+}
+
+/*.home {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 20px;
-  background-color: #f8f8f8; /* Sayfanın genel arka plan rengi */
+  background-color: #f8f8f8; 
+  color: #333; 
+*/
+.home.dark {
+  background-color: #121212; /* Koyu tema arka plan rengi */
+  color: #e0e0e0; /* Koyu tema yazı rengi */
 }
 
 /* Hikayelerin genel stili */
 .story {
-  background-color: #ffffff;
-  border-radius: 10px; /* Daha yumuşak köşeler */
-  padding: 20px; /* İçerik ile kenar arasındaki boşluk */
-  margin-bottom: 20px; /* Hikayeler arasındaki boşluk */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Daha belirgin ve modern gölge */
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover efekti */
+  background-color: #ffffff; /* Varsayılan açık tema hikaye arka planı */
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
-.story:hover {
-  transform: translateY(-5px); /* Hikaye üzerine gelindiğinde hafifçe yukarı kayma */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Hover'da daha belirgin gölge */
-}
-
-/* Hikaye görseli */
-.story-image {
-  width: 100%; /* Fotoğraf genişliğini container'a göre %100 yap */
-  max-width: 300px; /* Fotoğrafın genişliği 300px ile sınırlı */
-  height: auto;
-  border-radius: 10px; /* Yuvarlak köşeler */
-  margin-bottom: 15px; /* Görsel ile başlık arasındaki boşluk */
-  object-fit: cover; /* Fotoğrafın container'a uyumlu şekilde kesilmesi */
+.home.dark .story {
+  background-color: #1e1e1e; /* Koyu tema hikaye arka planı */
+  color: #cfcfcf; /* Koyu tema yazı rengi */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Daha koyu gölge */
 }
 
 /* Hikaye başlığı */
 .story-title {
-  font-size: 1.6em; /* Başlık boyutunu biraz küçülttüm */
+  font-size: 1.6em;
   color: #333333;
   font-weight: bold;
-  margin-bottom: 10px; /* Başlık ile içerik arasındaki boşluk */
+  margin-bottom: 10px;
   line-height: 1.4;
-  text-transform: capitalize; /* Başlıkta her kelimenin ilk harfi büyük */
+  text-transform: capitalize;
 }
 
-/* Hikaye açıklaması */
-.story-description {
-  font-size: 1.1em;
-  color: #555555;
-  line-height: 1.6;
-  margin-bottom: 15px;
-  font-weight: 300; /* Daha hafif yazı tipi */
+.home.dark .story-title {
+  color: #ffffff; /* Koyu tema başlık rengi */
 }
 
 /* 'Daha fazla oku' butonu */
@@ -62,98 +84,58 @@
   transition: background-color 0.3s ease;
 }
 
+.home.dark .read-more-btn {
+  background-color: #9b4db3; /* Koyu tema buton rengi */
+}
+
 .read-more-btn:hover {
   background-color: #9b4db3;
-  transform: scale(1.05); /* Hover efektinde butonun büyümesi */
 }
 
-/* Yazar adı */
-.author {
-  font-size: 1em;
-  font-weight: bold;
-  color: #404444;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center; /* Yazar adı ve ikon yan yana */
-}
-
-/* Yazar ikonu */
-.icon {
-  margin-left: 8px;
-  font-size: 1.3em;
-  color: #888;
+.home.dark .read-more-btn:hover {
+  background-color: #576959; /* Koyu tema buton hover rengi */
 }
 
 /* Hikaye konusu (etiket) */
 .story-konu {
-  border-radius: 20px;
-  padding: 5px 15px;
-  font-size: 1rem;
-  font-weight: bold;
+  background-color: #576959;
   color: #fff;
   border: 1px solid #ddd;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: bold;
   display: inline-block;
   text-align: center;
-  background-color: #576959; /* Konu etiketinin rengini belirgin hale getirdim */
   margin-top: 10px;
   transition: background-color 0.3s ease;
 }
 
+.home.dark .story-konu {
+  background-color: #3a3a3a; /* Koyu tema etiket arka planı */
+  border: 1px solid #555;
+}
+
 .story-konu:hover {
-  background-color: #9b4db3; /* Hover'da etiketin rengini değiştir */
-}
-
-/* Etkileşimler kısmı (yorumlar ve beğeniler) */
-.interactions {
-  margin-top: 25px;
-  padding: 15px;
-  border-top: 1px solid #f1f1f1;
-}
-
-/* Yorumlar */
-.comments ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.comments input,
-.comments textarea {
-  margin-bottom: 15px;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  background-color: #f9f9f9;
-}
-
-.comments button {
-  background-color: #576959;
-  color: #fff;
-  padding: 10px 20px;
-  font-size: 1.1em;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.comments button:hover {
   background-color: #9b4db3;
 }
 
-/* Beğen butonu */
-.likes button {
-  background-color: #c09624;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s ease;
+.home.dark .story-konu:hover {
+  background-color: #576959; /* Koyu tema etiket hover arka planı */
+}
+.story-image {
+  max-width: 50%; /* Görselin genişliğini sınırlıyoruz */
+  border-radius: 8px; /* Daha yumuşak köşeler için */
+  margin-top: 10px; /* Üst boşluk biraz daha fazla */
+  display: block; /* Ortalamak için blok seviyesine al */
+  margin-left: auto; /* Soldan boşluk bırak */
+  margin-right: auto; /* Sağdan boşluk bırak */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge ile şıklık */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover animasyonu */
 }
 
-.likes button:hover {
-  background-color: #ff0000;
+.story-image:hover {
+  transform: scale(1.05); /* Hover'da görseli biraz büyüt */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Hover'da gölgeyi artır */
 }
+

@@ -9,57 +9,11 @@ body {
 }
 
 /* Header (Üst Container) */
-.header {
-  background: #333030; /* Siyah arka plan */
-  color: #f3ebeb; /* Beyaz metin */
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hafif gölge */
-}
 
-.header h1 {
-  font-size: 1.8rem;
-  margin: 0;
-  color: #fff; /* Beyaz başlık */
-}
 
-.header nav ul {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-}
-
-.header nav li {
-  font-weight: bold;
-}
-
-.header nav a {
-  color: #fff; /* Beyaz linkler */
-  text-decoration: none;
-  transition: color 0.3s ease-in-out;
-}
-
-.header nav a:hover {
-  color: #ae75bd; /* Turuncu hover efekti */
-}
-
-/* Footer */
-.footer {
-  background: #333; /* Koyu renk footer */
-  color: white;
-  text-align: center;
-  padding: 1.5rem 0;
-  margin-top: 2rem;
-  font-size: 0.9rem;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-}
 
 /* Ana İçerik */
-main {
-  padding: 2rem;
-}
+
 
 /* Story Card */
 .story-card {
@@ -146,11 +100,4 @@ main {
   h2 {
     font-size: 1.8rem;
   }
-}
-
-.story-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-top: 15px;
 }

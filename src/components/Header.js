@@ -18,6 +18,7 @@ function Header() {
       <button className="menu-button" onClick={toggleMenu}>
         ☰
       </button>
+    
       <div className={`side-menu ${isMenuOpen ? "open" : ""}`}>
         <button className="close-button" onClick={toggleMenu}>
           ×

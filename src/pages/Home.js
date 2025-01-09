@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./Home.css";
+  
 const Home = () => {
+  
   const stories = [
     {
       id: 4,
@@ -83,10 +85,11 @@ Peki, taş bir heykel nasıl olur da bu kadar güçlü bir etki yaratabilir? Cev
 "Düşünen Adam," taşın içinden özgür bırakılmış bir ruhun simgesidir. O, bize düşünmenin, sorgulamanın ve insan olmanın ne anlama geldiğini hatırlatır. Bu heykel, zamanın ve mekanın ötesine geçen bir çağrı yapar: "Kim olduğunuzu ve neden burada olduğunuzu düşünün.`,
     }, 
   ];
-
+  
   const [readMore, setReadMore] = useState(null);
   const [comments, setComments] = useState({});
   const [likes, setLikes] = useState({});
+  const [isDarkMode, setIsDarkMode] = useState(false); // Tema durumunu kontrol etmek için
 
   const handleReadMore = (id) => {
     setReadMore(readMore === id ? null : id);
@@ -112,8 +115,15 @@ Peki, taş bir heykel nasıl olur da bu kadar güçlü bir etki yaratabilir? Cev
     }));
   };
 
+  const toggleTheme = () => {
+    setIsDarkMode((prev) => !prev);
+  };
+
   return (
-    <div className="home">
+    <div className={`home ${isDarkMode ? "dark" : ""}`}>
+      <button className="theme-toggle-btn" onClick={toggleTheme}>
+        {isDarkMode ? "🌞 Açık Tema" : "🌙 Koyu Tema"}
+      </button>
       {stories.map((story) => (
         <div key={story.id} className="story">
           <h2 className="story-title">{story.title}</h2>
@@ -135,8 +145,8 @@ Peki, taş bir heykel nasıl olur da bu kadar güçlü bir etki yaratabilir? Cev
           {readMore === story.id && (
             <div className="interactions">
               <div className="likes">
-                <button onClick={() => handleLike(story.id)}>💖Beğen</button>
-                <span>{likes[story.id ] || " 0 " }    Like💖</span>
+                <button onClick={() => handleLike(story.id)}>💖 Beğen</button>
+                <span>{likes[story.id] || "0"} Like 💖</span>
               </div>
               <div className="comments">
                 <form onSubmit={(e) => handleCommentSubmit(e, story.id)}>
