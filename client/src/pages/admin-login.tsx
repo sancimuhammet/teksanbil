@@ -5,13 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Eye, EyeOff, LogIn, Shield } from "lucide-react";
+import { Eye, EyeOff, LogIn, Shield, AlertTriangle } from "lucide-react";
 import { loginWithEmail, logout } from "@/lib/firebase";
+import { checkAdminAccess, getAdminError } from "@/lib/adminAuth";
+import { useUserAuth } from "@/hooks/useUserAuth";
 import { toast } from "@/hooks/use-toast";
 import { trackEvent } from "@/lib/analytics";
 
 export default function AdminLogin() {
   const [, setLocation] = useLocation();
+  const { user } = useUserAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -35,12 +38,18 @@ export default function AdminLogin() {
     setError("");
 
     try {
-      const user = await loginWithEmail(formData.email, formData.password);
+      const firebaseUser = await loginWithEmail(formData.email, formData.password);
       
-      // Başarılı giriş - herhangi bir Firebase kullanıcısı admin olabilir
+      // Email kontrolü - sadece yönetici emaillerine izin ver
+      if (!checkAdminAccess(firebaseUser)) {
+        await logout(); // Hemen çıkış yap
+        setError("Bu hesap yönetici yetkisine sahip değil.");
+        setIsLoading(false);
+        return;
+      }
       toast({
         title: "Başarılı!",
-        description: `Hoşgeldiniz, ${user.email}`,
+        description: `Hoşgeldiniz, ${firebaseUser.email}`,
       });
       trackEvent('admin_login', 'auth', 'success');
       setLocation('/add-story'); // Admin girişi sonrası hikaye ekleme sayfasına git

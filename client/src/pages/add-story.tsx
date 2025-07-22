@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AdminGuard } from "@/components/admin-guard";
-import { useAuth } from "@/hooks/useAuth";
+import { useUserAuth } from "@/hooks/useUserAuth";
+import { checkAdminAccess } from "@/lib/adminAuth";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { SearchModal } from "@/components/search-modal";
@@ -20,7 +21,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
 export default function AddStory() {
-  const { user } = useAuth();
+  const { user } = useUserAuth();
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [, setLocation] = useLocation();
   const [formData, setFormData] = useState({
