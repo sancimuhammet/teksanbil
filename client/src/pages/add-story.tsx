@@ -113,9 +113,26 @@ export default function AddStory() {
         likes: 0
       };
 
-      // Sadece Firebase'e kaydet
-      const storyId = await addStoryToFirestore(storyData);
-      console.log('✅ Firebase success:', storyId);
+      // Firebase ve Express'e kaydet
+      let firebaseSuccess = false;
+      try {
+        const storyId = await addStoryToFirestore(storyData);
+        console.log('✅ Firebase success:', storyId);
+        firebaseSuccess = true;
+      } catch (firebaseError: any) {
+        console.warn('⚠️ Firebase failed:', firebaseError);
+      }
+      
+      // Express'e de kaydet
+      try {
+        await apiRequest('POST', '/api/stories', storyData);
+        console.log('✅ Express success');
+      } catch (expressError: any) {
+        console.warn('⚠️ Express failed:', expressError);
+        if (!firebaseSuccess) {
+          throw expressError;
+        }
+      }
       
       toast({
         title: "Başarılı!",

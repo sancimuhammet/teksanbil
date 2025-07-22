@@ -19,16 +19,44 @@ export default function StoryPage() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { data: story, isLoading, error } = useQuery({
+  // Önce Firebase'den dene
+  const { data: firebaseStory, isLoading: firebaseLoading } = useQuery({
     queryKey: [`firebase-story-${id}`],
     queryFn: () => getStoryFromFirestore(id!),
     enabled: !!id,
     retry: false
-  }) as { data: any, isLoading: boolean, error: any };
+  });
+
+  // Firebase'de bulunamazsa Express'den dene
+  const { data: expressStory, isLoading: expressLoading } = useQuery({
+    queryKey: [`/api/stories/${id}`],
+    enabled: !!id && !firebaseStory,
+    retry: false
+  });
+
+  const story = firebaseStory || expressStory;
+  const isLoading = firebaseLoading || expressLoading;
+
+  // Safety check for story properties
+  const safeStory = story ? {
+    ...story,
+    title: story.title || 'Başlıksız',
+    excerpt: story.excerpt || '',
+    content: story.content || '',
+    author: story.author || 'Anonim',
+    authorInitials: story.authorInitials || 'A',
+    category: story.category || 'genel',
+    tags: story.tags || [],
+    views: story.views || 0,
+    likes: story.likes || 0,
+    readTime: story.readTime || '1 dk',
+    date: story.date || new Date().toLocaleDateString('tr-TR'),
+    imageUrl: story.imageUrl || ''
+  } : null;
 
   const handleLike = () => {
-    if (story) {
-      trackEvent('story_like', 'engagement', story.title);
+    if (safeStory) {
+      trackEvent('story_like', 'engagement', safeStory.title);
       toast({
         title: "Beğenildi!",
         description: "Hikayeyi beğendiniz.",
@@ -37,14 +65,14 @@ export default function StoryPage() {
   };
 
   const handleShare = async () => {
-    if (story) {
-      trackEvent('story_share', 'engagement', story.title);
+    if (safeStory) {
+      trackEvent('story_share', 'engagement', safeStory.title);
       
       if (navigator.share) {
         try {
           await navigator.share({
-            title: story.title,
-            text: story.excerpt,
+            title: safeStory.title,
+            text: safeStory.excerpt,
             url: window.location.href,
           });
         } catch (err) {
@@ -91,7 +119,7 @@ export default function StoryPage() {
     );
   }
 
-  if (!story) {
+  if (!safeStory) {
     return (
       <>
         <Navigation onSearchOpen={() => setIsSearchModalOpen(true)} />
@@ -108,8 +136,8 @@ export default function StoryPage() {
     );
   }
 
-  const previewText = story.content.slice(0, 500);
-  const fullText = story.content;
+  const previewText = safeStory.content.slice(0, 500);
+  const fullText = safeStory.content;
 
   return (
     <>
@@ -130,39 +158,39 @@ export default function StoryPage() {
             {/* Header */}
             <header className="mb-8">
               <div className="flex items-center space-x-2 mb-4">
-                <Badge variant="secondary">{story.category}</Badge>
+                <Badge variant="secondary">{safeStory.category}</Badge>
                 <div className="flex items-center text-sm text-muted-foreground space-x-4">
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-1" />
-                    {story.date}
+                    {safeStory.date}
                   </div>
                   <div className="flex items-center">
                     <Clock className="w-4 h-4 mr-1" />
-                    {story.readTime}
+                    {safeStory.readTime}
                   </div>
                   <div className="flex items-center">
                     <Eye className="w-4 h-4 mr-1" />
-                    {story.views.toLocaleString()}
+                    {safeStory.views.toLocaleString()}
                   </div>
                 </div>
               </div>
               
               <h1 className="text-4xl lg:text-5xl font-bold leading-tight mb-6">
-                {story.title}
+                {safeStory.title}
               </h1>
               
               <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-                {story.excerpt}
+                {safeStory.excerpt}
               </p>
 
               {/* Author & Actions */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-primary to-cyan-500 rounded-full flex items-center justify-center">
-                    <span className="text-white font-semibold">{story.authorInitials}</span>
+                    <span className="text-white font-semibold">{safeStory.authorInitials}</span>
                   </div>
                   <div>
-                    <p className="font-semibold">{story.author}</p>
+                    <p className="font-semibold">{safeStory.author}</p>
                     <p className="text-sm text-muted-foreground">Yazar</p>
                   </div>
                 </div>
@@ -170,7 +198,7 @@ export default function StoryPage() {
                 <div className="flex items-center space-x-2">
                   <Button variant="outline" size="sm" onClick={handleLike}>
                     <Heart className="w-4 h-4 mr-2" />
-                    {story.likes}
+                    {safeStory.likes}
                   </Button>
                   <Button variant="outline" size="sm" onClick={handleShare}>
                     <Share2 className="w-4 h-4 mr-2" />
@@ -183,8 +211,8 @@ export default function StoryPage() {
             {/* Featured Image */}
             <div className="mb-8">
               <img
-                src={story.imageUrl}
-                alt={story.title}
+                src={safeStory.imageUrl}
+                alt={safeStory.title}
                 className="w-full h-96 object-cover rounded-2xl shadow-lg"
               />
             </div>
@@ -221,7 +249,7 @@ export default function StoryPage() {
 
             {/* Tags */}
             <div className="flex flex-wrap gap-2 mb-8">
-              {story?.tags?.map((tag: string) => (
+              {safeStory.tags.map((tag: string) => (
                 <Badge key={tag} variant="outline">{tag}</Badge>
               ))}
             </div>

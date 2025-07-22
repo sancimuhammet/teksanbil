@@ -7,15 +7,22 @@ import { getStoriesFromFirestore } from "@/lib/firebase";
 import type { Story } from "@shared/schema";
 
 export function FeaturedStories() {
-  // Sadece Firebase hikayeleri
-  const { data: firebaseStories = [], isLoading } = useQuery({
+  // Firebase hikayeleri
+  const { data: firebaseStories = [] } = useQuery({
     queryKey: ['firebase-stories'],
     queryFn: getStoriesFromFirestore,
     retry: false,
     staleTime: 5 * 60 * 1000
   });
 
-  const stories = (firebaseStories as any[]).slice(0, 6);
+  // Mevcut sistem hikayeleri
+  const { data: expressStories = [], isLoading } = useQuery<Story[]>({
+    queryKey: ['/api/stories'],
+  });
+
+  // Hikayeleri birleştir - Firebase önce, sonra mevcut sistem
+  const allStories = [...(firebaseStories as any[]), ...expressStories];
+  const stories = allStories.slice(0, 6);
 
   const handleLoadMore = () => {
     trackEvent('load_more_stories', 'engagement', 'featured_section');
