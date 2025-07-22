@@ -3,8 +3,18 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTheme } from "@/components/ui/theme-provider";
-import { Search, Moon, Sun, Menu, X } from "lucide-react";
+import { Search, Moon, Sun, Menu, X, User, LogOut } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
+import { useUserAuth } from "@/hooks/useUserAuth";
+import { logout } from "@/lib/firebase";
+import { toast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface NavigationProps {
   onSearchOpen: () => void;
@@ -14,6 +24,7 @@ export function Navigation({ onSearchOpen }: NavigationProps) {
   const [location] = useLocation();
   const { theme, setTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, userProfile, isLoading } = useUserAuth();
 
   const handleThemeToggle = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -28,6 +39,22 @@ export function Navigation({ onSearchOpen }: NavigationProps) {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast({
+        title: "Çıkış yapıldı",
+        description: "Başarıyla çıkış yapıldı.",
+      });
+    } catch (error) {
+      toast({
+        title: "Hata!",
+        description: "Çıkış yapılırken hata oluştu.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -65,9 +92,39 @@ export function Navigation({ onSearchOpen }: NavigationProps) {
               <Link href="/firebase-stories" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors">
                 Firebase
               </Link>
-              <Button variant="default" asChild>
-                <Link href="/admin-login">Yönetici</Link>
-              </Button>
+              {!isLoading && (
+                user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="flex items-center space-x-2">
+                        <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                          <span className="text-white text-sm font-semibold">
+                            {userProfile?.displayName?.charAt(0) || user.email?.charAt(0) || 'U'}
+                          </span>
+                        </div>
+                        <span className="hidden sm:inline">{userProfile?.displayName || 'Kullanıcı'}</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin-login" className="flex items-center">
+                          <User className="w-4 h-4 mr-2" />
+                          Yönetici Paneli
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout}>
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Çıkış Yap
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Button variant="default" asChild>
+                    <Link href="/user-login">Giriş Yap</Link>
+                  </Button>
+                )
+              )}
             </div>
 
             {/* Search & Theme Toggle */}

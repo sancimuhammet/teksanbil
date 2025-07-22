@@ -1,23 +1,27 @@
 import { useParams, Link } from "wouter";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { SearchModal } from "@/components/search-modal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Heart, Share2, Eye, Clock, Calendar, ChevronDown, ChevronUp } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { getStoryFromFirestore } from "@/lib/firebase";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeft, Heart, Share2, Eye, Clock, Calendar, ChevronDown, ChevronUp, MessageCircle, Send } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getStoryFromFirestore, toggleStoryLike, addComment, getStoryComments, incrementStoryViews } from "@/lib/firebase";
 import { trackEvent } from "@/lib/analytics";
 import { toast } from "@/hooks/use-toast";
-// Firebase verilerini kullandığımız için type import'u kaldırıyoruz
+import { useUserAuth } from "@/hooks/useUserAuth";
 
 export default function StoryPage() {
   const { id } = useParams();
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [commentText, setCommentText] = useState('');
+  const { user, userProfile } = useUserAuth();
+  const queryClient = useQueryClient();
 
   // Önce Firebase'den dene
   const { data: firebaseStory, isLoading: firebaseLoading } = useQuery({
@@ -36,6 +40,21 @@ export default function StoryPage() {
 
   const story = firebaseStory || expressStory;
   const isLoading = firebaseLoading || expressLoading;
+  
+  // Get comments for Firebase stories only
+  const { data: comments = [] } = useQuery({
+    queryKey: [`story-comments-${id}`],
+    queryFn: () => getStoryComments(id!),
+    enabled: !!id && !!firebaseStory,
+    retry: false
+  });
+  
+  // Increment views when story loads (Firebase stories only)
+  useEffect(() => {
+    if (firebaseStory && id) {
+      incrementStoryViews(id);
+    }
+  }, [firebaseStory, id]);
 
   // Safety check for story properties
   const safeStory = story ? {
@@ -54,14 +73,94 @@ export default function StoryPage() {
     imageUrl: story.imageUrl || ''
   } : null;
 
-  const handleLike = () => {
-    if (safeStory) {
-      trackEvent('story_like', 'engagement', safeStory.title);
+  // Like/Unlike mutation
+  const likeMutation = useMutation({
+    mutationFn: async () => {
+      if (!user || !firebaseStory) {
+        throw new Error("Authentication required");
+      }
+      return await toggleStoryLike(id!, user.uid);
+    },
+    onSuccess: (isLiked) => {
+      queryClient.invalidateQueries({ queryKey: [`firebase-story-${id}`] });
       toast({
-        title: "Beğenildi!",
-        description: "Hikayeyi beğendiniz.",
+        title: isLiked ? "Beğenildi!" : "Beğeni kaldırıldı",
+        description: isLiked ? "Hikayeyi beğendiniz." : "Beğeniniz kaldırıldı.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Hata!",
+        description: "Giriş yapmanız gerekiyor.",
+        variant: "destructive",
       });
     }
+  });
+
+  // Comment mutation
+  const commentMutation = useMutation({
+    mutationFn: async (content: string) => {
+      if (!user || !userProfile || !firebaseStory) {
+        throw new Error("Authentication required");
+      }
+      return await addComment(id!, user.uid, content, userProfile.displayName);
+    },
+    onSuccess: () => {
+      setCommentText('');
+      queryClient.invalidateQueries({ queryKey: [`story-comments-${id}`] });
+      toast({
+        title: "Yorum eklendi!",
+        description: "Yorumunuz başarıyla eklendi.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Hata!",
+        description: "Yorum eklemek için giriş yapmanız gerekiyor.",
+        variant: "destructive",
+      });
+    }
+  });
+
+  const handleLike = () => {
+    if (!user) {
+      toast({
+        title: "Giriş gerekli",
+        description: "Beğenmek için giriş yapmalısınız.",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (!firebaseStory) {
+      toast({
+        title: "Bilgi",
+        description: "Bu özellik sadece yeni hikayeler için kullanılabilir.",
+        variant: "destructive",
+      });
+      return;
+    }
+    likeMutation.mutate();
+    trackEvent('story_like', 'engagement', safeStory.title);
+  };
+
+  const handleComment = () => {
+    if (!user) {
+      toast({
+        title: "Giriş gerekli", 
+        description: "Yorum yapmak için giriş yapmalısınız.",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (!commentText.trim()) {
+      toast({
+        title: "Hata",
+        description: "Yorum metni boş olamaz.",
+        variant: "destructive",
+      });
+      return;
+    }
+    commentMutation.mutate(commentText);
   };
 
   const handleShare = async () => {
@@ -256,15 +355,93 @@ export default function StoryPage() {
 
             <Separator className="mb-8" />
 
-            {/* Comment Section Placeholder */}
-            <Card>
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold mb-4">Yorum Ekle</h3>
-                <p className="text-muted-foreground">
-                  Yorum sistemi yakında aktif olacak. Bu hikaye hakkındaki düşüncelerinizi bizimle paylaşmak için geri dönün.
-                </p>
-              </CardContent>
-            </Card>
+            {/* Comments Section */}
+            <div className="space-y-8">
+              {/* Comment Form */}
+              {firebaseStory && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <MessageCircle className="w-5 h-5 mr-2" />
+                      Yorum Yap
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {user ? (
+                      <div className="space-y-4">
+                        <Textarea
+                          placeholder="Bu hikaye hakkında düşüncelerinizi paylaşın..."
+                          value={commentText}
+                          onChange={(e) => setCommentText(e.target.value)}
+                          className="min-h-[100px]"
+                        />
+                        <Button
+                          onClick={handleComment}
+                          disabled={commentMutation.isPending || !commentText.trim()}
+                        >
+                          <Send className="w-4 h-4 mr-2" />
+                          {commentMutation.isPending ? "Gönderiliyor..." : "Yorum Gönder"}
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <p className="text-muted-foreground mb-4">
+                          Yorum yapmak için giriş yapmalısınız.
+                        </p>
+                        <Button asChild>
+                          <Link href="/user-login">Giriş Yap</Link>
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Comments List */}
+              {firebaseStory && comments.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Yorumlar ({comments.length})</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {comments.map((comment: any) => (
+                      <div key={comment.id} className="border-b pb-4 last:border-b-0 last:pb-0">
+                        <div className="flex items-start space-x-3">
+                          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                            <span className="text-white text-sm font-semibold">
+                              {comment.authorName?.charAt(0) || 'U'}
+                            </span>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-1">
+                              <span className="font-semibold">{comment.authorName}</span>
+                              <span className="text-sm text-muted-foreground">
+                                {comment.createdAt?.toDate?.()?.toLocaleDateString('tr-TR') || 'Şimdi'}
+                              </span>
+                            </div>
+                            <p className="text-muted-foreground leading-relaxed">
+                              {comment.content}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Legacy story comment placeholder */}
+              {!firebaseStory && (
+                <Card>
+                  <CardContent className="p-8">
+                    <h3 className="text-2xl font-bold mb-4">Yorum Sistemi</h3>
+                    <p className="text-muted-foreground">
+                      Bu hikaye için yorum sistemi mevcut değil. Yeni hikayelerimizde yorum yapabilirsiniz.
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           </div>
         </article>
       </div>

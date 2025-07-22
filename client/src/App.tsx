@@ -13,6 +13,7 @@ import Contact from "@/pages/contact";
 import AddStory from "@/pages/add-story";
 import AdminLogin from "@/pages/admin-login";
 import FirebaseStories from "@/pages/firebase-stories";
+import UserLogin from "@/pages/user-login";
 import StoryPage from "@/pages/story";
 import NotFound from "@/pages/not-found";
 
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/admin-login" component={AdminLogin} />
       <Route path="/add-story" component={AddStory} />
       <Route path="/firebase-stories" component={FirebaseStories} />
+      <Route path="/user-login" component={UserLogin} />
       <Route path="/story/:id" component={StoryPage} />
       <Route component={NotFound} />
     </Switch>
