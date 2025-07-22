@@ -19,6 +19,6 @@ export const useAuth = () => {
     user,
     loading,
     isAuthenticated: !!user,
-    isAdmin: user?.email === 'admin@teksanbil.com' // Admin email kontrolü
+    isAdmin: !!user // Firebase'e giriş yapan herkes admin
   };
 };

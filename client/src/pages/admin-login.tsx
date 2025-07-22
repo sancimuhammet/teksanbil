@@ -37,20 +37,13 @@ export default function AdminLogin() {
     try {
       const user = await loginWithEmail(formData.email, formData.password);
       
-      // Admin kontrolü
-      if (user.email === 'admin@teksanbil.com') {
-        toast({
-          title: "Başarılı!",
-          description: "Admin olarak giriş yaptınız.",
-        });
-        trackEvent('admin_login', 'auth', 'success');
-        setLocation('/add-story'); // Admin girişi sonrası hikaye ekleme sayfasına git
-      } else {
-        // Admin değilse çıkış yap
-        await logout();
-        setError("Bu sayfaya erişim yetkiniz bulunmuyor.");
-        trackEvent('admin_login', 'auth', 'unauthorized');
-      }
+      // Başarılı giriş - herhangi bir Firebase kullanıcısı admin olabilir
+      toast({
+        title: "Başarılı!",
+        description: `Hoşgeldiniz, ${user.email}`,
+      });
+      trackEvent('admin_login', 'auth', 'success');
+      setLocation('/add-story'); // Admin girişi sonrası hikaye ekleme sayfasına git
     } catch (error: any) {
       console.error('Login error:', error);
       let errorMessage = "Giriş yapılırken bir hata oluştu.";
@@ -98,7 +91,7 @@ export default function AdminLogin() {
                 type="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="admin@teksanbil.com"
+                placeholder="E-posta adresiniz"
                 required
                 disabled={isLoading}
               />
