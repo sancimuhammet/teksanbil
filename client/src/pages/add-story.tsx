@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { AdminGuard } from "@/components/admin-guard";
+import { useAuth } from "@/hooks/useAuth";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { SearchModal } from "@/components/search-modal";
@@ -13,11 +15,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { PlusCircle, Save, Eye, X, Upload, FileText } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { trackEvent } from "@/lib/analytics";
-import { useMutation } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
+import { addStoryToFirestore, logout } from "@/lib/firebase";
 import { useLocation } from "wouter";
 
 export default function AddStory() {
+  const { user } = useAuth();
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [, setLocation] = useLocation();
   const [formData, setFormData] = useState({
@@ -35,6 +37,7 @@ export default function AddStory() {
   });
   const [newTag, setNewTag] = useState("");
   const [isPreview, setIsPreview] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const categories = [
     { value: "teknoloji", label: "Teknoloji" },
@@ -43,28 +46,22 @@ export default function AddStory() {
     { value: "psikoloji", label: "Psikoloji" },
   ];
 
-  const createStoryMutation = useMutation({
-    mutationFn: async (storyData: typeof formData) => {
-      return apiRequest('POST', '/api/stories', storyData);
-    },
-    onSuccess: (data) => {
+  const handleLogout = async () => {
+    try {
+      await logout();
       toast({
-        title: "Başarılı!",
-        description: "Hikaye başarıyla oluşturuldu.",
+        title: "Çıkış Yapıldı",
+        description: "Başarıyla çıkış yaptınız.",
       });
-      queryClient.invalidateQueries({ queryKey: ['/api/stories'] });
-      trackEvent('story_create', 'content', 'success');
-      setLocation(`/story/${data.id}`);
-    },
-    onError: (error: Error) => {
+      setLocation('/');
+    } catch (error) {
       toast({
         title: "Hata",
-        description: error.message || "Hikaye oluşturulurken bir hata oluştu.",
+        description: "Çıkış yapılırken bir hata oluştu.",
         variant: "destructive",
       });
-      trackEvent('story_create', 'content', 'error');
-    },
-  });
+    }
+  };
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({
@@ -102,11 +99,54 @@ export default function AddStory() {
       return;
     }
 
+    setIsSubmitting(true);
     trackEvent('story_create', 'content', 'attempt');
-    createStoryMutation.mutate({
-      ...formData,
-      date: new Date().toLocaleDateString('tr-TR')
-    });
+
+    try {
+      const storyData = {
+        ...formData,
+        date: new Date().toLocaleDateString('tr-TR'),
+        createdAt: new Date(),
+        published: formData.published,
+        views: 0,
+        likes: 0
+      };
+
+      const storyId = await addStoryToFirestore(storyData);
+      
+      toast({
+        title: "Başarılı!",
+        description: "Hikaye Firebase'e başarıyla kaydedildi.",
+      });
+      
+      trackEvent('story_create', 'content', 'success');
+      
+      // Reset form
+      setFormData({
+        title: "",
+        excerpt: "",
+        content: "",
+        author: "Muhammet Şanci",
+        authorInitials: "MŞ",
+        category: "",
+        tags: [],
+        imageUrl: "",
+        readTime: "",
+        featured: false,
+        published: true
+      });
+      
+    } catch (error: any) {
+      console.error('Story creation error:', error);
+      toast({
+        title: "Hata",
+        description: "Hikaye kaydedilirken bir hata oluştu: " + error.message,
+        variant: "destructive",
+      });
+      trackEvent('story_create', 'content', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handlePreview = () => {
@@ -115,7 +155,7 @@ export default function AddStory() {
   };
 
   return (
-    <>
+    <AdminGuard>
       <Navigation onSearchOpen={() => setIsSearchModalOpen(true)} />
       <SearchModal isOpen={isSearchModalOpen} onClose={() => setIsSearchModalOpen(false)} />
       
@@ -128,13 +168,19 @@ export default function AddStory() {
                 <div>
                   <h1 className="text-3xl font-bold mb-2">Yeni Hikaye Ekle</h1>
                   <p className="text-muted-foreground">
-                    Teknoloji, sanat ve bilim dünyasından yeni bir hikaye paylaşın
+                    Admin paneli - Yeni hikaye oluşturun ve Firebase'e kaydedin
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Hoşgeldin, {user?.email}
                   </p>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline" onClick={handlePreview}>
                     <Eye className="w-4 h-4 mr-2" />
                     {isPreview ? "Editör" : "Önizle"}
+                  </Button>
+                  <Button variant="outline" onClick={handleLogout}>
+                    Çıkış Yap
                   </Button>
                 </div>
               </div>
@@ -323,11 +369,11 @@ export default function AddStory() {
                     </Button>
                     <Button 
                       type="submit" 
-                      disabled={createStoryMutation.isPending}
+                      disabled={isSubmitting}
                       size="lg"
                     >
                       <Save className="w-5 h-5 mr-2" />
-                      {createStoryMutation.isPending ? "Kaydediliyor..." : "Hikayeyi Kaydet"}
+                      {isSubmitting ? "Firebase'e Kaydediliyor..." : "Firebase'e Kaydet"}
                     </Button>
                   </div>
                 </form>
@@ -387,6 +433,6 @@ export default function AddStory() {
       </div>
 
       <Footer />
-    </>
+    </AdminGuard>
   );
 }

@@ -63,7 +63,7 @@ export function Navigation({ onSearchOpen }: NavigationProps) {
                 İletişim
               </Link>
               <Button variant="default" asChild>
-                <Link href="/login">Giriş Yap</Link>
+                <Link href="/admin-login">Yönetici</Link>
               </Button>
             </div>
 

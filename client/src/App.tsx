@@ -11,6 +11,7 @@ import Home from "@/pages/home";
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import AddStory from "@/pages/add-story";
+import AdminLogin from "@/pages/admin-login";
 import StoryPage from "@/pages/story";
 import NotFound from "@/pages/not-found";
 
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
+      <Route path="/admin-login" component={AdminLogin} />
       <Route path="/add-story" component={AddStory} />
       <Route path="/story/:id" component={StoryPage} />
       <Route component={NotFound} />
