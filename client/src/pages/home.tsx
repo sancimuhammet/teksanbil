@@ -10,6 +10,7 @@ import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { ArrowUp } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { getStoriesFromFirestore } from "@/lib/firebase";
 import type { Story } from "@shared/schema";
 
 export default function Home() {

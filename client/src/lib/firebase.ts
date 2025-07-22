@@ -57,14 +57,20 @@ export const addStoryToFirestore = async (storyData: any) => {
 
 export const getStoriesFromFirestore = async () => {
   try {
-    const q = query(collection(db, 'stories'), orderBy('createdAt', 'desc'));
+    console.log('Fetching stories from Firestore...');
+    const storiesRef = collection(db, 'stories');
+    const q = query(storiesRef, orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
-    const stories: any[] = [];
-    querySnapshot.forEach((doc) => {
-      stories.push({ id: doc.id, ...doc.data() });
-    });
+    
+    const stories = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    
+    console.log('Firebase stories fetched:', stories.length, 'stories');
     return stories;
   } catch (error) {
+    console.error('Error fetching stories from Firestore:', error);
     throw error;
   }
 };
