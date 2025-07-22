@@ -113,26 +113,9 @@ export default function AddStory() {
         likes: 0
       };
 
-      // Önce Firebase'e kaydet
-      let firebaseSuccess = false;
-      try {
-        const storyId = await addStoryToFirestore(storyData);
-        console.log('✅ Firebase success:', storyId);
-        firebaseSuccess = true;
-      } catch (firebaseError: any) {
-        console.error('❌ Firebase failed:', firebaseError);
-      }
-      
-      // Sonra mevcut sisteme de kaydet (yedek olarak)
-      try {
-        const response = await apiRequest('POST', '/api/stories', storyData);
-        console.log('✅ Local system success:', response);
-      } catch (localError: any) {
-        console.error('❌ Local system failed:', localError);
-        if (!firebaseSuccess) {
-          throw localError; // İkisi de başarısız olduysa hata fırlat
-        }
-      }
+      // Sadece Firebase'e kaydet
+      const storyId = await addStoryToFirestore(storyData);
+      console.log('✅ Firebase success:', storyId);
       
       toast({
         title: "Başarılı!",

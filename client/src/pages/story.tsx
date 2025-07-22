@@ -9,18 +9,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Heart, Share2, Eye, Clock, Calendar, ChevronDown, ChevronUp } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { getStoryFromFirestore } from "@/lib/firebase";
 import { trackEvent } from "@/lib/analytics";
 import { toast } from "@/hooks/use-toast";
-import type { Story } from "@shared/schema";
+// Firebase verilerini kullandığımız için type import'u kaldırıyoruz
 
 export default function StoryPage() {
   const { id } = useParams();
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { data: story, isLoading } = useQuery<Story>({
-    queryKey: ['/api/stories', id],
-  });
+  const { data: story, isLoading, error } = useQuery({
+    queryKey: [`firebase-story-${id}`],
+    queryFn: () => getStoryFromFirestore(id!),
+    enabled: !!id,
+    retry: false
+  }) as { data: any, isLoading: boolean, error: any };
 
   const handleLike = () => {
     if (story) {
@@ -217,7 +221,7 @@ export default function StoryPage() {
 
             {/* Tags */}
             <div className="flex flex-wrap gap-2 mb-8">
-              {story.tags.map((tag) => (
+              {story?.tags?.map((tag: string) => (
                 <Badge key={tag} variant="outline">{tag}</Badge>
               ))}
             </div>
