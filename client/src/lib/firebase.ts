@@ -39,6 +39,7 @@ export const onAuthChange = (callback: (user: User | null) => void) => {
 // Firestore functions
 export const addStoryToFirestore = async (storyData: any) => {
   try {
+    console.log('Attempting to add story to Firestore:', storyData);
     const docRef = await addDoc(collection(db, 'stories'), {
       ...storyData,
       createdAt: new Date(),
@@ -46,8 +47,10 @@ export const addStoryToFirestore = async (storyData: any) => {
       views: 0,
       likes: 0
     });
+    console.log('Story added with ID:', docRef.id);
     return docRef.id;
   } catch (error) {
+    console.error('Firestore error:', error);
     throw error;
   }
 };

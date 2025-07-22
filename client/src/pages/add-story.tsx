@@ -16,6 +16,7 @@ import { PlusCircle, Save, Eye, X, Upload, FileText } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { trackEvent } from "@/lib/analytics";
 import { addStoryToFirestore, logout } from "@/lib/firebase";
+import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
 export default function AddStory() {
@@ -112,11 +113,30 @@ export default function AddStory() {
         likes: 0
       };
 
-      const storyId = await addStoryToFirestore(storyData);
+      // Önce Firebase'e kaydet
+      let firebaseSuccess = false;
+      try {
+        const storyId = await addStoryToFirestore(storyData);
+        console.log('✅ Firebase success:', storyId);
+        firebaseSuccess = true;
+      } catch (firebaseError: any) {
+        console.error('❌ Firebase failed:', firebaseError);
+      }
+      
+      // Sonra mevcut sisteme de kaydet (yedek olarak)
+      try {
+        const response = await apiRequest('POST', '/api/stories', storyData);
+        console.log('✅ Local system success:', response);
+      } catch (localError: any) {
+        console.error('❌ Local system failed:', localError);
+        if (!firebaseSuccess) {
+          throw localError; // İkisi de başarısız olduysa hata fırlat
+        }
+      }
       
       toast({
         title: "Başarılı!",
-        description: "Hikaye Firebase'e başarıyla kaydedildi.",
+        description: "Hikaye başarıyla kaydedildi.",
       });
       
       trackEvent('story_create', 'content', 'success');
@@ -168,7 +188,7 @@ export default function AddStory() {
                 <div>
                   <h1 className="text-3xl font-bold mb-2">Yeni Hikaye Ekle</h1>
                   <p className="text-muted-foreground">
-                    Admin paneli - Yeni hikaye oluşturun ve Firebase'e kaydedin
+                    Admin paneli - Yeni hikaye oluşturun
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
                     Hoşgeldin, {user?.email}
@@ -373,7 +393,7 @@ export default function AddStory() {
                       size="lg"
                     >
                       <Save className="w-5 h-5 mr-2" />
-                      {isSubmitting ? "Firebase'e Kaydediliyor..." : "Firebase'e Kaydet"}
+                      {isSubmitting ? "Kaydediliyor..." : "Hikayeyi Kaydet"}
                     </Button>
                   </div>
                 </form>
