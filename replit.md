@@ -7,8 +7,9 @@ Modern React-based web application replacing the original teksanbil.com site. Bu
 ## Recent Changes (January 22, 2025)
 
 ✓ **Hybrid Story System**: Implemented dual data source system showing both Firebase Firestore stories and Express backend stories together in the main interface
-✓ **Firebase Admin Authentication**: Users can login with Firebase and add new stories that are saved to Firestore
-✓ **Dual Story Reading**: Story pages can display content from either Firebase or Express backend based on story ID
+✓ **User Authentication System**: Complete Firebase Authentication integration for regular users with profile management, likes, and comments
+✓ **Admin Security Fix**: Implemented separate admin authentication with email restrictions (muhammetsanci10@gmail.com, teksanbil@gmail.com only)
+✓ **Interactive Features**: Added like and comment functionality for Firebase stories with user profiles
 ✓ **Type Safety**: Fixed all TypeScript errors for Firebase data structure with proper safety checks
 ✓ **Backward Compatibility**: All existing stories preserved and accessible alongside new Firebase content
 

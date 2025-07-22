@@ -1,8 +1,7 @@
 // Admin authentication logic - bu listeye sadece yönetici emaillerini ekleyin
 const ADMIN_EMAILS = [
-  'admin@teksanbil.com',
-  // Yeni yönetici emaillerini buraya ekleyebilirsiniz:
-  // 'yonetici@example.com',
+  'muhammetsanci10@gmail.com',
+  'teksanbil@gmail.com'
 ];
 
 export const isAdminEmail = (email: string): boolean => {
