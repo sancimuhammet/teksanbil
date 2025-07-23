@@ -38,9 +38,31 @@ export function Footer() {
                 variant="ghost"
                 size="icon"
                 className="hover:bg-primary"
-                onClick={() => handleSocialClick('twitter')}
+                asChild
               >
-                <Twitter className="w-5 h-5" />
+                <a 
+                  href="https://twitter.com/teksanbil" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={() => handleSocialClick('twitter')}
+                >
+                  <Twitter className="w-5 h-5" />
+                </a>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-primary"
+                asChild
+              >
+                <a 
+                  href="https://instagram.com/teksanbil" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={() => handleSocialClick('instagram')}
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
               </Button>
               <Button
                 variant="ghost"
@@ -57,14 +79,6 @@ export function Footer() {
                 onClick={() => handleSocialClick('github')}
               >
                 <Github className="w-5 h-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="hover:bg-primary"
-                onClick={() => handleSocialClick('instagram')}
-              >
-                <Instagram className="w-5 h-5" />
               </Button>
             </div>
           </div>

@@ -4,14 +4,13 @@
 
 Modern React-based web application replacing the original teksanbil.com site. Built with hybrid architecture combining Firebase Firestore for new stories and Express.js backend for original content preservation. Features include story management, categorization, search functionality, newsletter subscriptions, Google Analytics integration, and Firebase authentication for admin access. The hybrid system displays both Firebase stories and existing Express stories together, maintaining all original content while enabling modern Firebase functionality.
 
-## Recent Changes (January 22, 2025)
+## Recent Changes (January 23, 2025)
 
-✓ **Hybrid Story System**: Implemented dual data source system showing both Firebase Firestore stories and Express backend stories together in the main interface
-✓ **User Authentication System**: Complete Firebase Authentication integration for regular users with profile management, likes, and comments
-✓ **Admin Security Fix**: Implemented separate admin authentication with email restrictions (muhammetsanci10@gmail.com, teksanbil@gmail.com only)
-✓ **Interactive Features**: Added like and comment functionality for Firebase stories with user profiles
-✓ **Type Safety**: Fixed all TypeScript errors for Firebase data structure with proper safety checks
-✓ **Backward Compatibility**: All existing stories preserved and accessible alongside new Firebase content
+✓ **Hero Section Fix**: Removed static "Aşkın Gözü Kör mü Acaba?" text, now properly displays featured story title
+✓ **Admin Story Management**: Added comprehensive Firebase story management system in admin panel with delete functionality
+✓ **Social Media Integration**: Updated Instagram and Twitter links to @teksanbil username across footer
+✓ **Enhanced Admin Panel**: "Yönet" button allows viewing and deleting all Firebase stories with confirmation dialogs
+✓ **UI Improvements**: Streamlined admin interface with proper feedback and cache invalidation after operations
 
 ## User Preferences
 
