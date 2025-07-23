@@ -9,6 +9,7 @@ import type { Category } from "@shared/schema";
 const iconMap = {
   Monitor,
   FlaskConical,
+  Flask: FlaskConical, // Flask alias için
   Book,
   Lightbulb,
 };
@@ -19,7 +20,7 @@ export function CategoriesSection() {
   });
 
   // Firebase hikayelerini çek
-  const { data: firebaseStories = [] } = useQuery({
+  const { data: firebaseStories = [], isLoading: firebaseLoading } = useQuery({
     queryKey: ['firebase-stories'],
     queryFn: getStoriesFromFirestore,
   });
@@ -40,7 +41,9 @@ export function CategoriesSection() {
     trackEvent('category_click', 'navigation', categoryName);
   };
 
-  if (isLoading) {
+  console.log('Categories debug:', { categories, isLoading, firebaseStories, firebaseLoading, categoriesWithCounts });
+
+  if (isLoading || firebaseLoading) {
     return (
       <section className="py-20">
         <div className="container mx-auto px-4 lg:px-8">
