@@ -2,17 +2,17 @@
 
 ## Overview
 
-Modern React-based web application replacing the original teksanbil.com site. Built with Express.js backend architecture for reliable story management and content delivery. Features include story management, categorization, search functionality, newsletter subscriptions, Google Analytics integration. Original stories are preserved in Express backend structure for consistent performance and deployment. Firebase remains available for future additional features but core functionality runs on Express for simplicity and reliability.
+Modern React-based web application replacing the original teksanbil.com site. Built with hybrid architecture combining Firebase Firestore for new stories and Express.js backend for legacy content preservation. Firebase stories receive priority display and include interactive features (likes, comments, view tracking). Express stories provide reliable backup and preserve original content. The system seamlessly displays both story types with unified UI while maintaining all original content and enabling modern Firebase functionality for new additions.
 
 ## Recent Changes (January 23, 2025)
 
-✓ **Architecture Simplification**: Removed Firebase complexity, using Express-only for all stories
-✓ **Express Story System**: Original content now properly stored in Express backend structure  
-✓ **Featured Story Fix**: Featured story reliably comes from Express data
-✓ **Clean Data Flow**: Single source of truth - Express handles all story operations
-✓ **Performance Improvement**: Eliminated Firebase/Express dual loading complexity
-✓ **Type Safety**: Fixed TypeScript errors and simplified component structure
-✓ **Production Ready**: Build system optimized for Vercel deployment
+✓ **Hybrid Firebase System**: Firebase primary for new stories, Express for legacy content
+✓ **Story Prioritization**: Firebase stories appear first in listings, Express stories as backup
+✓ **Featured Story Logic**: Firebase stories take priority, Express as fallback for featured section  
+✓ **Interactive Features**: Like, comment, view tracking active for Firebase stories only
+✓ **Seamless Integration**: Both story types display uniformly with proper ID handling
+✓ **User Preference**: New stories go to Firebase per user request for modern functionality
+✓ **Production Ready**: Build system optimized with hybrid data sources
 
 ## User Preferences
 

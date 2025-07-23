@@ -18,10 +18,38 @@ export default function Home() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Featured story sadece Express'den (basit ve güvenilir)
-  const { data: featuredStory } = useQuery<Story>({
+  // Firebase'den en son hikayeyi featured olarak kullan
+  const { data: firebaseStories } = useQuery({
+    queryKey: ['firebase-stories'],
+    queryFn: () => getStoriesFromFirestore(),
+  });
+
+  // Express'den yedek featured story
+  const { data: expressFeaturedStory } = useQuery<Story>({
     queryKey: ['/api/stories/featured'],
   });
+
+  // Firebase'de hikaye varsa en sonuncusunu, yoksa Express'den featured'ı kullan
+  const featuredStory = firebaseStories && firebaseStories.length > 0 
+    ? {
+        id: `firebase-${firebaseStories[0].id}`,
+        title: firebaseStories[0].title || '',
+        excerpt: firebaseStories[0].excerpt || '',
+        author: firebaseStories[0].author || 'Anonim',
+        authorInitials: firebaseStories[0].authorInitials || 'A',
+        category: firebaseStories[0].category || 'Genel',
+        tags: firebaseStories[0].tags || [],
+        imageUrl: firebaseStories[0].imageUrl || 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=400',
+        readTime: firebaseStories[0].readTime || '3 dk',
+        date: firebaseStories[0].date || new Date().toLocaleDateString('tr-TR'),
+        views: firebaseStories[0].views || 0,
+        likes: firebaseStories[0].likes || 0,
+        featured: true,
+        published: true,
+        content: firebaseStories[0].content || '',
+        createdAt: firebaseStories[0].createdAt?.toDate?.() || new Date()
+      }
+    : expressFeaturedStory;
 
   // Handle scroll events for back to top button and reading progress
   useEffect(() => {
