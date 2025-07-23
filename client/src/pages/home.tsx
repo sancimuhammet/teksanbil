@@ -32,9 +32,17 @@ export default function Home() {
   // En son eklenen Firebase hikayesi varsa onu kullan, yoksa Express'den gelen öne çıkarılanı kullan
   const featuredStory = (firebaseStories && firebaseStories.length > 0) 
     ? {
-        ...firebaseStories[0],
-        // Firebase hikayesi için Story type'ına uygun şekilde dönüştür
-        id: parseInt(firebaseStories[0].id) || 0,
+        id: firebaseStories[0].id,
+        title: firebaseStories[0].title || '',
+        content: firebaseStories[0].content || '',
+        excerpt: firebaseStories[0].excerpt || '',
+        author: firebaseStories[0].author || '',
+        authorInitials: firebaseStories[0].authorInitials || '',
+        category: firebaseStories[0].category || '',
+        tags: firebaseStories[0].tags || [],
+        imageUrl: firebaseStories[0].imageUrl || '',
+        readTime: firebaseStories[0].readTime || '',
+        date: firebaseStories[0].date || new Date().toLocaleDateString('tr-TR'),
         createdAt: firebaseStories[0].createdAt?.toDate?.() || new Date(),
         views: firebaseStories[0].views || 0,
         likes: firebaseStories[0].likes || 0,

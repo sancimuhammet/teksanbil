@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Eye, Heart, Share2 } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
+import { Link } from "wouter";
 import type { Story } from "@shared/schema";
 
 interface HeroSectionProps {
@@ -82,8 +83,10 @@ export function HeroSection({ featuredStory }: HeroSectionProps) {
             </div>
 
             <div className="flex space-x-4">
-              <Button size="lg" onClick={handleReadStory}>
-                Hikayeyi Oku
+              <Button size="lg" asChild>
+                <Link href={`/story/${story.id}`} onClick={handleReadStory}>
+                  Hikayeyi Oku
+                </Link>
               </Button>
               <Button variant="outline" size="lg" onClick={handleSaveStory}>
                 Kaydet
@@ -94,12 +97,13 @@ export function HeroSection({ featuredStory }: HeroSectionProps) {
           <div className="relative animate-slide-up">
             <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-cyan/20 rounded-3xl blur-2xl" />
             
-            <Card className="relative shadow-2xl overflow-hidden">
-              <img 
-                src={story.imageUrl} 
-                alt="Romantic heart-shaped light creating emotional atmosphere"
-                className="w-full h-64 object-cover"
-              />
+            <Card className="relative shadow-2xl overflow-hidden cursor-pointer" asChild>
+              <Link href={`/story/${story.id}`}>
+                <img 
+                  src={story.imageUrl} 
+                  alt="Romantic heart-shaped light creating emotional atmosphere"
+                  className="w-full h-64 object-cover"
+                />
               
               <CardContent className="p-8">
                 <div className="space-y-4">
@@ -130,6 +134,7 @@ export function HeroSection({ featuredStory }: HeroSectionProps) {
                   </div>
                 </div>
               </CardContent>
+              </Link>
             </Card>
           </div>
         </div>
