@@ -24,6 +24,16 @@
   --ring: hsl(220, 70%, 50%);
   --radius: 0.5rem;
   --cyan: hsl(180, 100%, 70%);
+  
+  /* Category colors for light mode */
+  --tech-from: hsl(221, 83%, 20%);
+  --tech-to: hsl(221, 83%, 15%);
+  --science-from: hsl(158, 64%, 20%);
+  --science-to: hsl(158, 64%, 15%);
+  --art-from: hsl(271, 81%, 20%);
+  --art-to: hsl(239, 84%, 15%);
+  --psychology-from: hsl(24, 95%, 20%);
+  --psychology-to: hsl(0, 84%, 20%);
 }
 
 .dark {
@@ -47,6 +57,16 @@
   --destructive-foreground: hsl(210, 40%, 98%);
   --ring: hsl(207, 90%, 54%);
   --cyan: hsl(180, 100%, 50%);
+  
+  /* Category colors for dark mode */
+  --tech-from: hsl(221, 83%, 30%);
+  --tech-to: hsl(221, 83%, 25%);
+  --science-from: hsl(158, 64%, 30%);
+  --science-to: hsl(158, 64%, 25%);
+  --art-from: hsl(271, 81%, 30%);
+  --art-to: hsl(239, 84%, 25%);
+  --psychology-from: hsl(24, 95%, 30%);
+  --psychology-to: hsl(0, 84%, 30%);
 }
 
 @layer base {
