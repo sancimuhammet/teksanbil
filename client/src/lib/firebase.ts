@@ -2,20 +2,41 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { getFirestore, collection, addDoc, getDocs, doc, getDoc, query, orderBy, where, updateDoc, increment, arrayUnion, arrayRemove, setDoc, deleteDoc } from "firebase/firestore";
 
+// Firebase configuration with fallback for missing env vars
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.firebasestorage.app`,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCPlaceholder",
+  authDomain: `${import.meta.env.VITE_FIREBASE_PROJECT_ID || "demo-project"}.firebaseapp.com`,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "demo-project",
+  storageBucket: `${import.meta.env.VITE_FIREBASE_PROJECT_ID || "demo-project"}.firebasestorage.app`,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:demo:web:placeholder",
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+let app: any = null;
+let auth: any = null;
+let db: any = null;
+
+// Initialize Firebase only if proper config exists
+try {
+  if (import.meta.env.VITE_FIREBASE_API_KEY && 
+      import.meta.env.VITE_FIREBASE_PROJECT_ID && 
+      import.meta.env.VITE_FIREBASE_APP_ID) {
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  } else {
+    console.warn('Firebase credentials not found. Firebase features disabled.');
+  }
+} catch (error) {
+  console.warn('Firebase initialization failed:', error);
+}
+
+export { auth, db };
 
 // Auth functions
 export const loginWithEmail = async (email: string, password: string) => {
+  if (!auth) {
+    throw new Error('Firebase authentication not available');
+  }
   try {
     const result = await signInWithEmailAndPassword(auth, email, password);
     return result.user;
@@ -74,6 +95,9 @@ export const getUserProfile = async (uid: string) => {
 
 // Firestore functions
 export const addStoryToFirestore = async (storyData: any) => {
+  if (!db) {
+    throw new Error('Firebase not available');
+  }
   try {
     console.log('Attempting to add story to Firestore:', storyData);
     const docRef = await addDoc(collection(db, 'stories'), {
@@ -92,6 +116,11 @@ export const addStoryToFirestore = async (storyData: any) => {
 };
 
 export const getStoriesFromFirestore = async () => {
+  if (!db) {
+    console.warn('Firebase not initialized, returning empty stories');
+    return [];
+  }
+  
   try {
     console.log('Fetching stories from Firestore...');
     const storiesRef = collection(db, 'stories');
@@ -107,7 +136,7 @@ export const getStoriesFromFirestore = async () => {
     return stories;
   } catch (error) {
     console.error('Error fetching stories from Firestore:', error);
-    throw error;
+    return [];
   }
 };
 
