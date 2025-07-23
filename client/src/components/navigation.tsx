@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTheme } from "@/components/ui/theme-provider";
-import { Search, Moon, Sun, Menu, X, User, LogOut } from "lucide-react";
+import { Search, Moon, Sun, Menu, X, User, LogOut, ChevronDown, Shield } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import { useUserAuth } from "@/hooks/useUserAuth";
 import { logout } from "@/lib/firebase";
@@ -118,9 +118,30 @@ export function Navigation({ onSearchOpen }: NavigationProps) {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <Button variant="default" asChild>
-                    <Link href="/user-login">Giriş Yap</Link>
-                  </Button>
+                  <div className="flex items-center space-x-2">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="default">
+                          Giriş Yap
+                          <ChevronDown className="w-4 h-4 ml-2" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem asChild>
+                          <Link href="/user-login" className="flex items-center">
+                            <User className="w-4 h-4 mr-2" />
+                            Kullanıcı Girişi
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href="/admin-login" className="flex items-center">
+                            <Shield className="w-4 h-4 mr-2" />
+                            Yönetici Girişi
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 )
               )}
             </div>
@@ -181,11 +202,44 @@ export function Navigation({ onSearchOpen }: NavigationProps) {
                 İletişim
               </Link>
 
-              <Button variant="default" className="w-full" asChild>
-                <Link href="/admin-login" onClick={() => setIsMobileMenuOpen(false)}>
-                  Yönetici
-                </Link>
-              </Button>
+              {!isLoading && (
+                user ? (
+                  <div className="space-y-2">
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link href="/admin-login" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Shield className="w-4 h-4 mr-2" />
+                        Yönetici Paneli
+                      </Link>
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full" 
+                      onClick={() => {
+                        handleLogout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Çıkış Yap
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Button variant="default" className="w-full" asChild>
+                      <Link href="/user-login" onClick={() => setIsMobileMenuOpen(false)}>
+                        <User className="w-4 h-4 mr-2" />
+                        Kullanıcı Girişi
+                      </Link>
+                    </Button>
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link href="/admin-login" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Shield className="w-4 h-4 mr-2" />
+                        Yönetici Girişi
+                      </Link>
+                    </Button>
+                  </div>
+                )
+              )}
             </div>
           </div>
         )}
