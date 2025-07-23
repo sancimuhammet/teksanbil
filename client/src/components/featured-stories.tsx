@@ -4,9 +4,12 @@ import { StoryCard } from "./story-card";
 import { trackEvent } from "@/lib/analytics";
 import { useQuery } from "@tanstack/react-query";
 import { getStoriesFromFirestore } from "@/lib/firebase";
+import { useLocation } from "wouter";
 import type { Story } from "@shared/schema";
 
 export function FeaturedStories() {
+  const [, setLocation] = useLocation();
+  
   // Firebase hikayeleri (ana kaynak)
   const { data: firebaseStories = [] } = useQuery({
     queryKey: ['firebase-stories'],
@@ -46,6 +49,7 @@ export function FeaturedStories() {
 
   const handleLoadMore = () => {
     trackEvent('load_more_stories', 'engagement', 'featured_section');
+    setLocation('/firebase-stories'); // Tüm Firebase hikayelerini gösteren sayfaya yönlendir
   };
 
   if (isLoading) {

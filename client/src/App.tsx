@@ -12,7 +12,7 @@ import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import AddStory from "@/pages/add-story";
 import AdminLogin from "@/pages/admin-login";
-
+import FirebaseStories from "@/pages/firebase-stories";
 import UserLogin from "@/pages/user-login";
 import StoryPage from "@/pages/story";
 import Category from "@/pages/category";
@@ -29,7 +29,7 @@ function Router() {
       <Route path="/contact" component={Contact} />
       <Route path="/admin-login" component={AdminLogin} />
       <Route path="/add-story" component={AddStory} />
-
+      <Route path="/firebase-stories" component={FirebaseStories} />
       <Route path="/user-login" component={UserLogin} />
       <Route path="/story/:id" component={StoryPage} />
       <Route path="/category/:slug" component={Category} />
