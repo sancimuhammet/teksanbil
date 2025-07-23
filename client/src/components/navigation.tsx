@@ -89,9 +89,7 @@ export function Navigation({ onSearchOpen }: NavigationProps) {
               <Link href="/contact" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors">
                 İletişim
               </Link>
-              <Link href="/firebase-stories" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors">
-                Firebase
-              </Link>
+
               {!isLoading && (
                 user ? (
                   <DropdownMenu>
@@ -182,13 +180,7 @@ export function Navigation({ onSearchOpen }: NavigationProps) {
               >
                 İletişim
               </Link>
-              <Link
-                href="/firebase-stories"
-                className="block text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Firebase
-              </Link>
+
               <Button variant="default" className="w-full" asChild>
                 <Link href="/admin-login" onClick={() => setIsMobileMenuOpen(false)}>
                   Yönetici

@@ -18,9 +18,30 @@ export default function Home() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { data: featuredStory } = useQuery<Story>({
+  // Firebase'den en son eklenen hikayeyi öne çıkarılan olarak getir
+  const { data: firebaseStories } = useQuery({
+    queryKey: ['firebase-stories'],
+    queryFn: () => getStoriesFromFirestore(),
+  });
+
+  // Express'den de öne çıkarılan hikayeyi yedek olarak getir
+  const { data: fallbackFeaturedStory } = useQuery<Story>({
     queryKey: ['/api/stories/featured'],
   });
+
+  // En son eklenen Firebase hikayesi varsa onu kullan, yoksa Express'den gelen öne çıkarılanı kullan
+  const featuredStory = (firebaseStories && firebaseStories.length > 0) 
+    ? {
+        ...firebaseStories[0],
+        // Firebase hikayesi için Story type'ına uygun şekilde dönüştür
+        id: parseInt(firebaseStories[0].id) || 0,
+        createdAt: firebaseStories[0].createdAt?.toDate?.() || new Date(),
+        views: firebaseStories[0].views || 0,
+        likes: firebaseStories[0].likes || 0,
+        featured: true,
+        published: true
+      }
+    : fallbackFeaturedStory;
 
   // Handle scroll events for back to top button and reading progress
   useEffect(() => {
