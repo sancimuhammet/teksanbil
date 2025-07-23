@@ -7,42 +7,10 @@ import { getStoriesFromFirestore } from "@/lib/firebase";
 import type { Story } from "@shared/schema";
 
 export function FeaturedStories() {
-  // Firebase hikayeleri
-  const { data: firebaseStories = [] } = useQuery({
-    queryKey: ['firebase-stories'],
-    queryFn: getStoriesFromFirestore,
-    retry: false,
-    staleTime: 5 * 60 * 1000
-  });
-
-  // Mevcut sistem hikayeleri
-  const { data: expressStories = [], isLoading } = useQuery<Story[]>({
+  // Ana hikayeler Express'den (site yapısında saklı original content)
+  const { data: stories = [], isLoading } = useQuery<Story[]>({
     queryKey: ['/api/stories'],
   });
-
-  // Express hikayeleri önce (güvenilir), sonra Firebase
-  const combinedStories = [
-    ...expressStories,
-    ...firebaseStories.map((fbStory: any) => ({
-      id: `firebase-${fbStory.id}`, // Firebase stories için prefix ekle
-      title: fbStory.title || '',
-      excerpt: fbStory.excerpt || '',
-      author: fbStory.author || 'Anonim',
-      authorInitials: fbStory.authorInitials || 'A',
-      category: fbStory.category || 'Genel',
-      tags: fbStory.tags || [],
-      imageUrl: fbStory.imageUrl || 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=400',
-      readTime: fbStory.readTime || '3 dk',
-      date: fbStory.date || new Date().toLocaleDateString('tr-TR'),
-      views: fbStory.views || 0,
-      likes: fbStory.likes || 0,
-      featured: false,
-      published: true,
-      content: fbStory.content || '',
-      createdAt: fbStory.createdAt?.toDate?.() || new Date()
-    }))
-  ];
-  const stories = combinedStories.slice(0, 6);
 
   const handleLoadMore = () => {
     trackEvent('load_more_stories', 'engagement', 'featured_section');

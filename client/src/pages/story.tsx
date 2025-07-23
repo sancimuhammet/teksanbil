@@ -23,41 +23,20 @@ export default function StoryPage() {
   const { user, userProfile } = useUserAuth();
   const queryClient = useQueryClient();
 
-  // Firebase story ID'si varsa Firebase'den al
-  const isFirebaseStory = id?.startsWith('firebase-');
-  const actualId = isFirebaseStory ? id?.replace('firebase-', '') : id;
-
-  const { data: firebaseStory, isLoading: firebaseLoading } = useQuery({
-    queryKey: [`firebase-story-${actualId}`],
-    queryFn: () => getStoryFromFirestore(actualId!),
-    enabled: !!actualId && isFirebaseStory,
+  // Hikayeler sadece Express'den (basit ve güvenilir)
+  const { data: story, isLoading } = useQuery({
+    queryKey: [`/api/stories/${id}`],
+    enabled: !!id,
     retry: false
   });
-
-  // Express story için
-  const { data: expressStory, isLoading: expressLoading } = useQuery({
-    queryKey: [`/api/stories/${actualId}`],
-    enabled: !!actualId && !isFirebaseStory,
-    retry: false
-  });
-
-  const story = firebaseStory || expressStory;
-  const isLoading = firebaseLoading || expressLoading;
   
-  // Get comments for Firebase stories only
-  const { data: comments = [], refetch: refetchComments } = useQuery({
+  // Firebase features (comments, likes) sadece isteğe bağlı
+  const { data: comments = [] } = useQuery({
     queryKey: [`story-comments-${id}`],
     queryFn: () => getStoryComments(id!),
-    enabled: !!id && !!firebaseStory,
+    enabled: false, // Şimdilik kapalı
     retry: false
   });
-  
-  // Increment views when story loads (Firebase stories only)
-  useEffect(() => {
-    if (firebaseStory && id) {
-      incrementStoryViews(id);
-    }
-  }, [firebaseStory, id]);
 
   // Safety check for story properties
   const safeStory = story ? {

@@ -18,19 +18,10 @@ export default function Home() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Firebase'den en son eklenen hikayeyi öne çıkarılan olarak getir
-  const { data: firebaseStories } = useQuery({
-    queryKey: ['firebase-stories'],
-    queryFn: () => getStoriesFromFirestore(),
-  });
-
-  // Express'den de öne çıkarılan hikayeyi yedek olarak getir
-  const { data: fallbackFeaturedStory } = useQuery<Story>({
+  // Featured story sadece Express'den (basit ve güvenilir)
+  const { data: featuredStory } = useQuery<Story>({
     queryKey: ['/api/stories/featured'],
   });
-
-  // Express'den öne çıkarılan hikayeyi kullan (güvenilir)
-  const featuredStory = fallbackFeaturedStory;
 
   // Handle scroll events for back to top button and reading progress
   useEffect(() => {
