@@ -11,3 +11,7 @@ vite.config.ts.*
 *.log
 .replit
 replit.nix
+
+# Firebase credentials
+*firebase-adminsdk*.json
+attached_assets/*firebase*.json
