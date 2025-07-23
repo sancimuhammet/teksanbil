@@ -63,9 +63,9 @@ export function CategoriesSection() {
                 href={`/category/${category.slug}`}
                 onClick={() => handleCategoryClick(category.name)}
               >
-                <Card className={`group relative overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 text-white`}>
-                  <div className={`absolute inset-0 bg-gradient-to-br ${category.color} group-hover:opacity-90`} />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+                <Card className={`group relative overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 text-white shadow-lg hover:shadow-xl`}>
+                  <div className={`absolute inset-0 bg-gradient-to-br ${category.color}`} />
+                  <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors" />
                   
                   <CardContent className="relative z-10 p-8">
                     <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4">
