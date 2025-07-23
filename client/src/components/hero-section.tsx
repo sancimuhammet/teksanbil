@@ -57,8 +57,7 @@ export function HeroSection({ featuredStory }: HeroSectionProps) {
                 Öne Çıkan Hikaye
               </Badge>
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-                {story.title}
-                <span className="block text-primary">Aşkın Gözü Kör mü Acaba?</span>
+                <span className="block text-primary">{story.title}</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
                 {story.excerpt}

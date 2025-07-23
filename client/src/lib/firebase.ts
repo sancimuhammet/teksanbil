@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { getFirestore, collection, addDoc, getDocs, doc, getDoc, query, orderBy, where, updateDoc, increment, arrayUnion, arrayRemove, setDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, doc, getDoc, query, orderBy, where, updateDoc, increment, arrayUnion, arrayRemove, setDoc, deleteDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -208,5 +208,17 @@ export const incrementStoryViews = async (storyId: string) => {
     });
   } catch (error) {
     console.warn('Error incrementing views:', error);
+  }
+};
+
+// Delete story from Firestore
+export const deleteStoryFromFirestore = async (storyId: string) => {
+  try {
+    const storyRef = doc(db, 'stories', storyId);
+    await deleteDoc(storyRef);
+    console.log('Story deleted successfully:', storyId);
+  } catch (error) {
+    console.error('Error deleting story:', error);
+    throw error;
   }
 };

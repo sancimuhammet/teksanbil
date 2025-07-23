@@ -13,17 +13,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PlusCircle, Save, Eye, X, Upload, FileText } from "lucide-react";
+import { PlusCircle, Save, Eye, X, Upload, FileText, Trash2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { trackEvent } from "@/lib/analytics";
-import { addStoryToFirestore, logout } from "@/lib/firebase";
+import { addStoryToFirestore, logout, getStoriesFromFirestore, deleteStoryFromFirestore } from "@/lib/firebase";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function AddStory() {
   const { user } = useUserAuth();
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [, setLocation] = useLocation();
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
@@ -40,6 +42,13 @@ export default function AddStory() {
   const [newTag, setNewTag] = useState("");
   const [isPreview, setIsPreview] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showStoryManagement, setShowStoryManagement] = useState(false);
+
+  // Firebase'den hikayeleri getir
+  const { data: firebaseStories, isLoading: storiesLoading } = useQuery({
+    queryKey: ['firebase-stories'],
+    queryFn: () => getStoriesFromFirestore(),
+  });
 
   const categories = [
     { value: "teknoloji", label: "Teknoloji" },
@@ -156,6 +165,9 @@ export default function AddStory() {
         featured: false,
         published: true
       });
+
+      // Cache'i yenile
+      queryClient.invalidateQueries({ queryKey: ['firebase-stories'] });
       
     } catch (error: any) {
       console.error('Story creation error:', error);
@@ -173,6 +185,33 @@ export default function AddStory() {
   const handlePreview = () => {
     setIsPreview(!isPreview);
     trackEvent('story_preview', 'content', isPreview ? 'close' : 'open');
+  };
+
+  const handleDeleteStory = async (storyId: string, storyTitle: string) => {
+    if (!confirm(`"${storyTitle}" adlı hikayeyi silmek istediğinizden emin misiniz?`)) {
+      return;
+    }
+
+    try {
+      await deleteStoryFromFirestore(storyId);
+      
+      toast({
+        title: "Başarılı!",
+        description: "Hikaye başarıyla silindi.",
+      });
+
+      // Cache'i yenile
+      queryClient.invalidateQueries({ queryKey: ['firebase-stories'] });
+      
+      trackEvent('story_deleted', 'content', 'success');
+    } catch (error) {
+      console.error('Error deleting story:', error);
+      toast({
+        title: "Hata",
+        description: "Hikaye silinirken bir hata oluştu.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -200,6 +239,10 @@ export default function AddStory() {
                     <Eye className="w-4 h-4 mr-2" />
                     {isPreview ? "Editör" : "Önizle"}
                   </Button>
+                  <Button variant="secondary" onClick={() => setShowStoryManagement(!showStoryManagement)}>
+                    <FileText className="w-4 h-4 mr-2" />
+                    {showStoryManagement ? "Form" : "Yönet"}
+                  </Button>
                   <Button variant="outline" onClick={handleLogout}>
                     Çıkış Yap
                   </Button>
@@ -213,7 +256,59 @@ export default function AddStory() {
         <section className="py-12">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="max-w-4xl mx-auto">
-              {!isPreview ? (
+              {showStoryManagement ? (
+                /* Story Management Mode */
+                <div className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Trash2 className="w-5 h-5" />
+                        Hikaye Yönetimi
+                      </CardTitle>
+                      <p className="text-muted-foreground">Firebase'deki hikayeleri yönetin</p>
+                    </CardHeader>
+                    <CardContent>
+                      {storiesLoading ? (
+                        <div className="text-center py-8">
+                          <p className="text-muted-foreground">Hikayeler yükleniyor...</p>
+                        </div>
+                      ) : firebaseStories && firebaseStories.length > 0 ? (
+                        <div className="space-y-4">
+                          {firebaseStories.map((story: any) => (
+                            <div 
+                              key={story.id} 
+                              className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                            >
+                              <div className="flex-1">
+                                <h3 className="font-semibold text-lg">{story.title}</h3>
+                                <p className="text-sm text-muted-foreground mt-1">
+                                  {story.author} • {story.category} • {story.date}
+                                </p>
+                                <p className="text-sm text-muted-foreground mt-1">
+                                  {story.views || 0} görüntülenme • {story.likes || 0} beğeni
+                                </p>
+                              </div>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => handleDeleteStory(story.id, story.title)}
+                                className="ml-4"
+                              >
+                                <Trash2 className="w-4 h-4 mr-2" />
+                                Sil
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8">
+                          <p className="text-muted-foreground">Henüz Firebase'de hikaye bulunmuyor.</p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+              ) : !isPreview ? (
                 <form onSubmit={handleSubmit} className="space-y-8">
                   <Card>
                     <CardHeader>
