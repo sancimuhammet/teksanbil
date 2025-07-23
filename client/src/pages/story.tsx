@@ -55,85 +55,40 @@ export default function StoryPage() {
     imageUrl: story.imageUrl || ''
   } : null;
 
-  // Like/Unlike mutation
+  // Like/Unlike mutation (disabled for Express stories)
   const likeMutation = useMutation({
     mutationFn: async () => {
-      if (!user || !firebaseStory) {
-        throw new Error("Authentication required");
-      }
-      return await toggleStoryLike(id!, user.uid);
-    },
-    onSuccess: (isLiked) => {
-      queryClient.invalidateQueries({ queryKey: [`firebase-story-${id}`] });
-      toast({
-        title: isLiked ? "Beğenildi!" : "Beğeni kaldırıldı",
-        description: isLiked ? "Hikayeyi beğendiniz." : "Beğeniniz kaldırıldı.",
-      });
+      throw new Error("Like feature disabled for Express stories");
     },
     onError: () => {
       toast({
-        title: "Hata!",
-        description: "Giriş yapmanız gerekiyor.",
-        variant: "destructive",
+        title: "Bilgi",
+        description: "Beğeni özelliği şu anda aktif değil.",
       });
     }
   });
 
-  // Comment mutation
+  // Comment mutation (disabled for Express stories)
   const commentMutation = useMutation({
     mutationFn: async (content: string) => {
-      if (!user || !userProfile || !firebaseStory) {
-        throw new Error("Authentication required");
-      }
-      return await addComment(id!, user.uid, content, userProfile.displayName);
-    },
-    onSuccess: () => {
-      setCommentText('');
-      refetchComments();
-      toast({
-        title: "Yorum eklendi!",
-        description: "Yorumunuz başarıyla eklendi.",
-      });
+      throw new Error("Comment feature disabled for Express stories");
     },
     onError: () => {
       toast({
-        title: "Hata!",
-        description: "Yorum eklemek için giriş yapmanız gerekiyor.",
-        variant: "destructive",
+        title: "Bilgi",
+        description: "Yorum özelliği şu anda aktif değil.",
       });
     }
   });
 
   const handleLike = () => {
-    if (!user) {
-      toast({
-        title: "Giriş gerekli",
-        description: "Beğenmek için giriş yapmalısınız.",
-        variant: "destructive",
-      });
-      return;
-    }
-    if (!firebaseStory) {
-      toast({
-        title: "Bilgi",
-        description: "Bu özellik sadece yeni hikayeler için kullanılabilir.",
-        variant: "destructive",
-      });
-      return;
-    }
     likeMutation.mutate();
-    trackEvent('story_like', 'engagement', safeStory.title);
+    if (safeStory) {
+      trackEvent('story_like', 'engagement', safeStory.title);
+    }
   };
 
   const handleComment = () => {
-    if (!user) {
-      toast({
-        title: "Giriş gerekli", 
-        description: "Yorum yapmak için giriş yapmalısınız.",
-        variant: "destructive",
-      });
-      return;
-    }
     if (!commentText.trim()) {
       toast({
         title: "Hata",
@@ -340,7 +295,7 @@ export default function StoryPage() {
             {/* Comments Section */}
             <div className="space-y-8">
               {/* Comment Form */}
-              {firebaseStory && (
+              {false && (
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center">
@@ -380,7 +335,7 @@ export default function StoryPage() {
               )}
 
               {/* Comments List */}
-              {firebaseStory && comments.length > 0 && (
+              {false && comments.length > 0 && (
                 <Card>
                   <CardHeader>
                     <CardTitle>Yorumlar ({comments.length})</CardTitle>
@@ -413,7 +368,7 @@ export default function StoryPage() {
               )}
 
               {/* Legacy story comment placeholder */}
-              {!firebaseStory && (
+              {true && (
                 <Card>
                   <CardContent className="p-8">
                     <h3 className="text-2xl font-bold mb-4">Yorum Sistemi</h3>
