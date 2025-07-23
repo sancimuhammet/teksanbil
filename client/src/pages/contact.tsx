@@ -184,10 +184,10 @@ export default function Contact() {
                           Sorularınız için bize e-posta gönderebilirsiniz.
                         </p>
                         <a 
-                          href="mailto:info@teksanbil.com" 
+                          href="mailto:teksanbil@gmail.com" 
                           className="text-primary hover:underline"
                         >
-                          info@teksanbil.com
+                          teksanbil@gmail.com
                         </a>
                       </div>
                     </div>
