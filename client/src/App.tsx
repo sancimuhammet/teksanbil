@@ -15,6 +15,7 @@ import AdminLogin from "@/pages/admin-login";
 
 import UserLogin from "@/pages/user-login";
 import StoryPage from "@/pages/story";
+import Category from "@/pages/category";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -31,6 +32,7 @@ function Router() {
 
       <Route path="/user-login" component={UserLogin} />
       <Route path="/story/:id" component={StoryPage} />
+      <Route path="/category/:slug" component={Category} />
       <Route component={NotFound} />
     </Switch>
   );

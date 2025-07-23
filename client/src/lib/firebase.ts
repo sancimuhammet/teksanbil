@@ -161,24 +161,42 @@ export const toggleStoryLike = async (storyId: string, userId: string) => {
 // Add comment
 export const addComment = async (storyId: string, userId: string, content: string, authorName: string) => {
   try {
+    console.log('Adding comment to story:', storyId, 'by user:', userId);
     const commentData = {
       storyId,
       userId,
       authorName,
       content,
-      createdAt: new Date(),
+      createdAt: serverTimestamp(),
       likes: 0
     };
     
     const docRef = await addDoc(collection(db, 'comments'), commentData);
+    console.log('Comment added with ID:', docRef.id);
     
+    // Update story comment count
+    try {
+      await updateDoc(doc(db, 'stories', storyId), {
+        commentCount: increment(1)
+      });
+      console.log('Story comment count updated');
+    } catch (storyUpdateError) {
+      console.warn('Error updating story comment count:', storyUpdateError);
+    }
+
     // Update user comment count
-    await updateDoc(doc(db, 'users', userId), {
-      commentCount: increment(1)
-    });
+    try {
+      await updateDoc(doc(db, 'users', userId), {
+        commentCount: increment(1)
+      });
+      console.log('User comment count updated');
+    } catch (userUpdateError) {
+      console.warn('Error updating user comment count:', userUpdateError);
+    }
     
     return docRef.id;
   } catch (error) {
+    console.error('Error adding comment:', error);
     throw error;
   }
 };
@@ -186,16 +204,21 @@ export const addComment = async (storyId: string, userId: string, content: strin
 // Get comments for a story
 export const getStoryComments = async (storyId: string) => {
   try {
+    console.log('Fetching comments for story:', storyId);
     const commentsRef = collection(db, 'comments');
     const q = query(commentsRef, where('storyId', '==', storyId), orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
     
-    return querySnapshot.docs.map(doc => ({
+    const comments = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
+    
+    console.log('Comments fetched:', comments.length, 'comments');
+    return comments;
   } catch (error) {
-    throw error;
+    console.error('Error fetching comments:', error);
+    return [];
   }
 };
 

@@ -42,7 +42,7 @@ export default function StoryPage() {
   const isLoading = firebaseLoading || expressLoading;
   
   // Get comments for Firebase stories only
-  const { data: comments = [] } = useQuery({
+  const { data: comments = [], refetch: refetchComments } = useQuery({
     queryKey: [`story-comments-${id}`],
     queryFn: () => getStoryComments(id!),
     enabled: !!id && !!firebaseStory,
@@ -107,7 +107,7 @@ export default function StoryPage() {
     },
     onSuccess: () => {
       setCommentText('');
-      queryClient.invalidateQueries({ queryKey: [`story-comments-${id}`] });
+      refetchComments();
       toast({
         title: "Yorum eklendi!",
         description: "Yorumunuz başarıyla eklendi.",
