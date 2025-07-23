@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "wouter";
 import { trackEvent } from "@/lib/analytics";
 import { useQuery } from "@tanstack/react-query";
+import { getStoriesFromFirestore } from "@/lib/firebase";
 import type { Category } from "@shared/schema";
 
 const iconMap = {
@@ -15,6 +16,24 @@ const iconMap = {
 export function CategoriesSection() {
   const { data: categories = [], isLoading } = useQuery<Category[]>({
     queryKey: ['/api/categories'],
+  });
+
+  // Firebase hikayelerini çek
+  const { data: firebaseStories = [] } = useQuery({
+    queryKey: ['firebase-stories'],
+    queryFn: getStoriesFromFirestore,
+  });
+
+  // Kategori hikaye sayılarını Firebase'den hesapla
+  const categoriesWithCounts = categories.map(category => {
+    const storyCount = firebaseStories.filter((story: any) => 
+      story.category?.toLowerCase() === category.name.toLowerCase()
+    ).length;
+    
+    return {
+      ...category,
+      storyCount: storyCount
+    };
   });
 
   const handleCategoryClick = (categoryName: string) => {
@@ -54,7 +73,7 @@ export function CategoriesSection() {
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((category) => {
+          {categoriesWithCounts.map((category) => {
             const IconComponent = iconMap[category.icon as keyof typeof iconMap] || Monitor;
             
             return (

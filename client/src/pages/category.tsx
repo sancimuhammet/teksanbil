@@ -44,7 +44,8 @@ export default function Category() {
     story.category.toLowerCase() === categorySlug?.toLowerCase()
   ) || [];
 
-  const allFilteredStories = [...expressFilteredStories, ...firebaseFilteredStories];
+  // Firebase hikayeler önce, Express hikayeleri sonra
+  const allFilteredStories = [...firebaseFilteredStories, ...expressFilteredStories];
 
   useEffect(() => {
     if (categorySlug) {
