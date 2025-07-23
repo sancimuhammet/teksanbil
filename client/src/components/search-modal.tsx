@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, X } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Search, Clock, User, Eye, Heart, X } from "lucide-react";
 import { Link } from "wouter";
 import { trackEvent } from "@/lib/analytics";
-import { useQuery } from "@tanstack/react-query";
 import type { Story } from "@shared/schema";
 
 interface SearchModalProps {
@@ -15,146 +16,181 @@ interface SearchModalProps {
 }
 
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [category, setCategory] = useState("all");
 
-  const { data: searchResults = [], isLoading } = useQuery<Story[]>({
-    queryKey: ['/api/stories/search', searchTerm, selectedCategory],
-    enabled: searchTerm.length > 2,
+  const { data: searchResults = [], isLoading, refetch } = useQuery<Story[]>({
+    queryKey: ['/api/stories/search', searchQuery, category],
+    enabled: searchQuery.length >= 3,
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      params.append('q', searchQuery);
+      if (category !== 'all') {
+        params.append('category', category);
+      }
+      
+      const response = await fetch(`/api/stories/search?${params}`);
+      if (!response.ok) {
+        throw new Error('Arama başarısız');
+      }
+      return response.json();
+    }
   });
 
-  const categories = [
-    { value: "all", label: "Tüm Kategoriler" },
-    { value: "teknoloji", label: "Teknoloji" },
-    { value: "bilim", label: "Bilim" },
-    { value: "hikaye", label: "Hikaye" },
-    { value: "psikoloji", label: "Psikoloji" },
-  ];
-
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-    if (term.length > 2) {
-      trackEvent('search', 'engagement', term);
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.length >= 3) {
+      trackEvent('search', 'content', query);
     }
   };
 
-  const handleCategoryFilter = (category: string) => {
-    setSelectedCategory(category);
-    trackEvent('search_filter', 'engagement', category);
-  };
-
-  const handleResultClick = (story: Story) => {
-    trackEvent('search_result_click', 'engagement', story.title);
+  const handleStoryClick = (storyId: number, storyTitle: string) => {
+    trackEvent('search_result_click', 'content', storyTitle);
     onClose();
   };
 
+  const handleCategoryChange = (newCategory: string) => {
+    setCategory(newCategory);
+    trackEvent('search_filter', 'category', newCategory);
+  };
+
+  const categories = [
+    { value: "all", label: "Tümü" },
+    { value: "Teknoloji", label: "Teknoloji" },
+    { value: "Bilim", label: "Bilim" },
+    { value: "Sanat & Felsefe", label: "Sanat & Felsefe" },
+    { value: "Psikoloji", label: "Psikoloji" }
+  ];
+
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-      setSearchTerm("");
-      setSelectedCategory("all");
+      setSearchQuery("");
+      setCategory("all");
     }
-
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [isOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden p-0">
-        <DialogHeader className="p-6 pb-0">
-          <DialogTitle className="sr-only">Hikaye Arama</DialogTitle>
-          <div className="flex items-center space-x-4">
-            <Search className="w-6 h-6 text-muted-foreground" />
+      <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
+        <DialogHeader>
+          <DialogTitle className="flex items-center space-x-2">
+            <Search className="w-5 h-5" />
+            <span>Hikaye Ara</span>
+          </DialogTitle>
+        </DialogHeader>
+        
+        <div className="space-y-4">
+          {/* Search Input */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
-              type="text"
-              placeholder="Hikaye, yazar veya konu ara..."
-              value={searchTerm}
+              placeholder="Hikaye, yazar veya etiket ara..."
+              value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              className="flex-1 text-xl border-none focus:ring-0 p-0 h-auto bg-transparent"
+              className="pl-10"
               autoFocus
             />
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="w-6 h-6" />
-            </Button>
           </div>
-        </DialogHeader>
 
-        <div className="px-6">
-          <div className="flex flex-wrap gap-2 mb-6">
-            {categories.map((category) => (
+          {/* Category Filter */}
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
               <Button
-                key={category.value}
-                variant={selectedCategory === category.value ? "default" : "outline"}
+                key={cat.value}
+                variant={category === cat.value ? "default" : "outline"}
                 size="sm"
-                onClick={() => handleCategoryFilter(category.value)}
-                className="text-sm"
+                onClick={() => handleCategoryChange(cat.value)}
               >
-                {category.label}
+                {cat.label}
               </Button>
             ))}
           </div>
-        </div>
 
-        <div className="flex-1 overflow-y-auto px-6 pb-6">
-          {searchTerm.length === 0 ? (
-            <div className="text-center py-12">
-              <Search className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">Arama yapmaya başlayın</p>
-            </div>
-          ) : searchTerm.length < 3 ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">En az 3 karakter girin</p>
-            </div>
-          ) : isLoading ? (
-            <div className="space-y-4">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="flex items-center space-x-4 p-4 rounded-xl animate-pulse">
-                  <div className="w-16 h-16 bg-muted rounded-lg" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-muted rounded w-3/4" />
-                    <div className="h-3 bg-muted rounded w-1/2" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : searchResults.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">"{searchTerm}" için sonuç bulunamadı</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {searchResults.map((story) => (
+          {/* Search Results */}
+          <div className="max-h-96 overflow-y-auto space-y-3">
+            {searchQuery.length < 3 ? (
+              <div className="text-center py-8 text-gray-500">
+                <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>Aramaya başlamak için en az 3 karakter girin</p>
+              </div>
+            ) : isLoading ? (
+              <div className="space-y-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <Card key={i} className="animate-pulse">
+                    <CardContent className="p-4">
+                      <div className="flex space-x-4">
+                        <div className="w-20 h-16 bg-gray-200 rounded" />
+                        <div className="flex-1 space-y-2">
+                          <div className="h-4 bg-gray-200 rounded w-3/4" />
+                          <div className="h-3 bg-gray-200 rounded w-1/2" />
+                          <div className="h-3 bg-gray-200 rounded w-1/4" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : searchResults.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>"{searchQuery}" için sonuç bulunamadı</p>
+                <p className="text-sm">Farklı kelimeler deneyebilirsiniz</p>
+              </div>
+            ) : (
+              searchResults.map((story) => (
                 <Link
                   key={story.id}
                   href={`/story/${story.id}`}
-                  onClick={() => handleResultClick(story)}
-                  className="flex items-center space-x-4 p-4 rounded-xl hover:bg-muted/50 cursor-pointer transition-colors"
+                  onClick={() => handleStoryClick(story.id, story.title)}
                 >
-                  <img
-                    src={story.imageUrl}
-                    alt={story.title}
-                    className="w-16 h-16 rounded-lg object-cover"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold truncate">{story.title}</h4>
-                    <p className="text-sm text-muted-foreground line-clamp-2">
-                      {story.excerpt}
-                    </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <Badge variant="secondary" className="text-xs">
-                        {story.category}
-                      </Badge>
-                      <span className="text-xs text-muted-foreground">{story.author}</span>
-                    </div>
-                  </div>
+                  <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                    <CardContent className="p-4">
+                      <div className="flex space-x-4">
+                        <img
+                          src={story.imageUrl}
+                          alt={story.title}
+                          className="w-20 h-16 object-cover rounded"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold line-clamp-2 mb-2">
+                            {story.title}
+                          </h3>
+                          <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+                            {story.excerpt}
+                          </p>
+                          <div className="flex items-center justify-between text-xs text-gray-500">
+                            <div className="flex items-center space-x-4">
+                              <span className="flex items-center space-x-1">
+                                <User className="w-3 h-3" />
+                                <span>{story.author}</span>
+                              </span>
+                              <span className="flex items-center space-x-1">
+                                <Clock className="w-3 h-3" />
+                                <span>{story.readTime}</span>
+                              </span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <Badge variant="secondary" className="text-xs">
+                                {story.category}
+                              </Badge>
+                              <span className="flex items-center space-x-1">
+                                <Eye className="w-3 h-3" />
+                                <span>{story.views}</span>
+                              </span>
+                              <span className="flex items-center space-x-1">
+                                <Heart className="w-3 h-3" />
+                                <span>{story.likes}</span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </Link>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>
