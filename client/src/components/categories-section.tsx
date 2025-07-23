@@ -41,9 +41,8 @@ export function CategoriesSection() {
     trackEvent('category_click', 'navigation', categoryName);
   };
 
-  console.log('Categories debug:', { categories, isLoading, firebaseStories, firebaseLoading, categoriesWithCounts });
-
-  if (isLoading || firebaseLoading) {
+  // Sadece categories loading'i bekle, Firebase stories optional
+  if (isLoading) {
     return (
       <section className="py-20">
         <div className="container mx-auto px-4 lg:px-8">
@@ -65,6 +64,11 @@ export function CategoriesSection() {
         </div>
       </section>
     );
+  }
+
+  // Eğer kategoriler varsa göster
+  if (categories.length === 0) {
+    return null;
   }
 
   return (
