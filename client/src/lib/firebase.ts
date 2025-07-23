@@ -167,7 +167,7 @@ export const addComment = async (storyId: string, userId: string, content: strin
       userId,
       authorName,
       content,
-      createdAt: serverTimestamp(),
+      createdAt: new Date(),
       likes: 0
     };
     
