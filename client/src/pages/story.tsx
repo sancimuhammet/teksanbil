@@ -23,18 +23,21 @@ export default function StoryPage() {
   const { user, userProfile } = useUserAuth();
   const queryClient = useQueryClient();
 
-  // Önce Firebase'den dene
+  // Firebase story ID'si varsa Firebase'den al
+  const isFirebaseStory = id?.startsWith('firebase-');
+  const actualId = isFirebaseStory ? id?.replace('firebase-', '') : id;
+
   const { data: firebaseStory, isLoading: firebaseLoading } = useQuery({
-    queryKey: [`firebase-story-${id}`],
-    queryFn: () => getStoryFromFirestore(id!),
-    enabled: !!id,
+    queryKey: [`firebase-story-${actualId}`],
+    queryFn: () => getStoryFromFirestore(actualId!),
+    enabled: !!actualId && isFirebaseStory,
     retry: false
   });
 
-  // Firebase'de bulunamazsa Express'den dene
+  // Express story için
   const { data: expressStory, isLoading: expressLoading } = useQuery({
-    queryKey: [`/api/stories/${id}`],
-    enabled: !!id && !firebaseStory,
+    queryKey: [`/api/stories/${actualId}`],
+    enabled: !!actualId && !isFirebaseStory,
     retry: false
   });
 

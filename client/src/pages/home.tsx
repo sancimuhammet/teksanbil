@@ -29,27 +29,8 @@ export default function Home() {
     queryKey: ['/api/stories/featured'],
   });
 
-  // En son eklenen Firebase hikayesi varsa onu kullan, yoksa Express'den gelen öne çıkarılanı kullan
-  const featuredStory = (firebaseStories && firebaseStories.length > 0) 
-    ? {
-        id: parseInt(firebaseStories[0].id) || 0,
-        title: (firebaseStories[0] as any).title || '',
-        content: (firebaseStories[0] as any).content || '',
-        excerpt: (firebaseStories[0] as any).excerpt || '',
-        author: (firebaseStories[0] as any).author || '',
-        authorInitials: (firebaseStories[0] as any).authorInitials || '',
-        category: (firebaseStories[0] as any).category || '',
-        tags: (firebaseStories[0] as any).tags || [],
-        imageUrl: (firebaseStories[0] as any).imageUrl || '',
-        readTime: (firebaseStories[0] as any).readTime || '',
-        date: (firebaseStories[0] as any).date || new Date().toLocaleDateString('tr-TR'),
-        createdAt: (firebaseStories[0] as any).createdAt?.toDate?.() || new Date(),
-        views: (firebaseStories[0] as any).views || 0,
-        likes: (firebaseStories[0] as any).likes || 0,
-        featured: true,
-        published: true
-      }
-    : fallbackFeaturedStory;
+  // Express'den öne çıkarılan hikayeyi kullan (güvenilir)
+  const featuredStory = fallbackFeaturedStory;
 
   // Handle scroll events for back to top button and reading progress
   useEffect(() => {

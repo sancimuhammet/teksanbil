@@ -20,9 +20,29 @@ export function FeaturedStories() {
     queryKey: ['/api/stories'],
   });
 
-  // Hikayeleri birleştir - Firebase önce, sonra mevcut sistem
-  const allStories = [...(firebaseStories as any[]), ...expressStories];
-  const stories = allStories.slice(0, 6);
+  // Express hikayeleri önce (güvenilir), sonra Firebase
+  const combinedStories = [
+    ...expressStories,
+    ...firebaseStories.map((fbStory: any) => ({
+      id: `firebase-${fbStory.id}`, // Firebase stories için prefix ekle
+      title: fbStory.title || '',
+      excerpt: fbStory.excerpt || '',
+      author: fbStory.author || 'Anonim',
+      authorInitials: fbStory.authorInitials || 'A',
+      category: fbStory.category || 'Genel',
+      tags: fbStory.tags || [],
+      imageUrl: fbStory.imageUrl || 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=400',
+      readTime: fbStory.readTime || '3 dk',
+      date: fbStory.date || new Date().toLocaleDateString('tr-TR'),
+      views: fbStory.views || 0,
+      likes: fbStory.likes || 0,
+      featured: false,
+      published: true,
+      content: fbStory.content || '',
+      createdAt: fbStory.createdAt?.toDate?.() || new Date()
+    }))
+  ];
+  const stories = combinedStories.slice(0, 6);
 
   const handleLoadMore = () => {
     trackEvent('load_more_stories', 'engagement', 'featured_section');
