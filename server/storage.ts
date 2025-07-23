@@ -366,7 +366,7 @@ Ve Saflık ile Sevgi, hep onun yanında oldu.`,
       id,
       views: 0,
       likes: 0,
-      tags: insertStory.tags || [],
+      tags: (insertStory.tags && Array.isArray(insertStory.tags)) ? insertStory.tags : [],
       featured: insertStory.featured || false,
       published: insertStory.published || true,
       createdAt: new Date()
