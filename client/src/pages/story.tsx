@@ -324,30 +324,7 @@ export default function StoryPage() {
             <div className="prose prose-lg max-w-none dark:prose-invert mb-8">
               <div className="text-lg leading-relaxed">
             <div
-              style={{ whiteSpace: 'pre-wrap' }}
-              className="text-lg leading-relaxed"
-            >
-              {isExpanded ? fullText : previewText}
-            </div>
-            
-            {!isExpanded && fullText.length > previewText.length && (
-              <div className="mt-4">
-                <Button onClick={toggleExpanded} variant="outline">
-                  <ChevronDown className="w-4 h-4 mr-2" />
-                  Devamını Oku
-                </Button>
-              </div>
-            )}
-            
-            {isExpanded && fullText.length > previewText.length && (
-              <div className="mt-4">
-                <Button onClick={toggleExpanded} variant="outline">
-                  <ChevronUp className="w-4 h-4 mr-2" />
-                  Devamını Gizle
-                </Button>
-              </div>
-            )}
-
+                {isExpanded ? (
               </div>
             </div>
 
