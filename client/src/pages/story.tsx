@@ -14,6 +14,7 @@ import { getStoryFromFirestore, toggleStoryLike, addComment, getStoryComments, i
 import { trackEvent } from "@/lib/analytics";
 import { toast } from "@/hooks/use-toast";
 import { useUserAuth } from "@/hooks/useUserAuth";
+import { marked } from 'marked';
 
 export default function StoryPage() {
   const { id } = useParams();
@@ -241,6 +242,8 @@ export default function StoryPage() {
 
   const previewText = safeStory.content.slice(0, 500);
   const fullText = safeStory.content;
+  const parsedFullText = marked.parse(safeStory.content);
+  const parsedPreviewText = marked.parse(safeStory.content.slice(0, 500));
 
   return (
     <>
@@ -324,10 +327,10 @@ export default function StoryPage() {
             <div className="prose prose-lg max-w-none dark:prose-invert mb-8">
               <div className="text-lg leading-relaxed">
                 {isExpanded ? (
-                  <div dangerouslySetInnerHTML={{ __html: fullText }} />
+                  <div dangerouslySetInnerHTML={{ __html: parsedFullText }} />
                 ) : (
                   <>
-                    <div dangerouslySetInnerHTML={{ __html: previewText }} />
+                    <div dangerouslySetInnerHTML={{ __html: parsedPreviewText }} />
                     {fullText.length > previewText.length && (
                       <div className="mt-4">
                         <Button onClick={toggleExpanded} variant="outline">
