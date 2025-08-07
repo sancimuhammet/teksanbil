@@ -342,7 +342,7 @@ export default function StoryPage() {
                   </>
                 )}
                 
-                {isExpanded && fullText.length > previewText.length && (
+                {isExpanded && parsedFullText.length > parsedPreviewText.length && (
                   <div className="mt-4">
                     <Button onClick={toggleExpanded} variant="outline">
                       <ChevronUp className="w-4 h-4 mr-2" />
