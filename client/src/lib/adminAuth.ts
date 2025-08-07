@@ -2,7 +2,6 @@
 const ADMIN_EMAILS = [
   'muhammetsanci10@gmail.com',
   'teksanbil@gmail.com'
-  'brhn1903@icloud.com'
 ];
 
 export const isAdminEmail = (email: string): boolean => {
