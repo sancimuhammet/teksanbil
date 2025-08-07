@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AdminGuard } from "@/components/admin-guard";
 import { useUserAuth } from "@/hooks/useUserAuth";
 import { checkAdminAccess } from "@/lib/adminAuth";
@@ -13,10 +13,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PlusCircle, Save, Eye, X, Upload, FileText, Trash2 } from "lucide-react";
+import { PlusCircle, Save, Eye, X, Upload, FileText, Trash2 } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import { trackEvent } from "@/lib/analytics";
-import { addStoryToFirestore, logout, getStoriesFromFirestore, deleteStoryFromFirestore } from "@/lib/firebase";
+import { addStoryToFirestore, logout, getStoriesFromFirestore, deleteStoryFromFirestore, updateStoryInFirestore } from "@/lib/firebase";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -43,6 +43,7 @@ export default function AddStory() {
   const [isPreview, setIsPreview] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showStoryManagement, setShowStoryManagement] = useState(false);
+  const [editingStoryId, setEditingStoryId] = useState<string | null>(null);
 
   // Firebase'den hikayeleri getir
   const { data: firebaseStories, isLoading: storiesLoading } = useQuery({
@@ -111,47 +112,42 @@ export default function AddStory() {
     }
 
     setIsSubmitting(true);
-    trackEvent('story_create', 'content', 'attempt');
+    trackEvent(editingStoryId ? 'story_update' : 'story_create', 'content', 'attempt');
 
     try {
       const storyData = {
         ...formData,
-        date: new Date().toLocaleDateString('tr-TR'),
-        createdAt: new Date(),
-        published: formData.published,
-        views: 0,
-        likes: 0
+        // createdAt sadece yeni hikayeler için ayarlanır, güncellenmez
+        // date alanı Firebase'de güncellenmez, sadece ilk oluşturulduğunda ayarlanır
+        // views ve likes da burada güncellenmez
       };
 
-      // Firebase ve Express'e kaydet
-      let firebaseSuccess = false;
-      try {
-        const storyId = await addStoryToFirestore(storyData);
-        console.log('✅ Firebase success:', storyId);
-        firebaseSuccess = true;
-      } catch (firebaseError: any) {
-        console.warn('⚠️ Firebase failed:', firebaseError);
+      if (editingStoryId) {
+        // Mevcut hikayeyi güncelle
+        await updateStoryInFirestore(editingStoryId, storyData);
+        toast({
+          title: "Başarılı!",
+          description: "Hikaye başarıyla güncellendi.",
+        });
+        trackEvent('story_update', 'content', 'success');
+      } else {
+        // Yeni hikaye ekle
+        const newStoryData = {
+          ...storyData,
+          date: new Date().toLocaleDateString('tr-TR'), // Sadece yeni hikaye için tarih ekle
+          createdAt: new Date(),
+          views: 0,
+          likes: 0
+        };
+        await addStoryToFirestore(newStoryData);
+        toast({
+          title: "Başarılı!",
+          description: "Hikaye başarıyla kaydedildi.",
+        });
+        trackEvent('story_create', 'content', 'success');
       }
       
-      // Express'e de kaydet
-      try {
-        await apiRequest('POST', '/api/stories', storyData);
-        console.log('✅ Express success');
-      } catch (expressError: any) {
-        console.warn('⚠️ Express failed:', expressError);
-        if (!firebaseSuccess) {
-          throw expressError;
-        }
-      }
-      
-      toast({
-        title: "Başarılı!",
-        description: "Hikaye başarıyla kaydedildi.",
-      });
-      
-      trackEvent('story_create', 'content', 'success');
-      
-      // Reset form
+      // Formu sıfırla ve düzenleme modundan çık
       setFormData({
         title: "",
         excerpt: "",
@@ -165,18 +161,19 @@ export default function AddStory() {
         featured: false,
         published: true
       });
+      setEditingStoryId(null); // Düzenleme modundan çık
 
       // Cache'i yenile
       queryClient.invalidateQueries({ queryKey: ['firebase-stories'] });
       
     } catch (error: any) {
-      console.error('Story creation error:', error);
+      console.error('Story operation error:', error);
       toast({
         title: "Hata",
-        description: "Hikaye kaydedilirken bir hata oluştu: " + error.message,
+        description: "Hikaye kaydedilirken/güncellenirken bir hata oluştu: " + error.message,
         variant: "destructive",
       });
-      trackEvent('story_create', 'content', 'error');
+      trackEvent(editingStoryId ? 'story_update' : 'story_create', 'content', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -214,6 +211,35 @@ export default function AddStory() {
     }
   };
 
+  const handleEditStory = (storyId: string) => {
+    setEditingStoryId(storyId);
+    setShowStoryManagement(false); // Form görünümüne geç
+    trackEvent('story_edit_start', 'content', storyId);
+  };
+
+  useEffect(() => {
+    if (editingStoryId && firebaseStories) {
+      const storyToEdit = firebaseStories.find((story: any) => story.id === editingStoryId);
+      if (storyToEdit) {
+        setFormData({
+          title: storyToEdit.title || "",
+          excerpt: storyToEdit.excerpt || "",
+          content: storyToEdit.content || "",
+          author: storyToEdit.author || "Muhammet Şanci",
+          authorInitials: storyToEdit.authorInitials || "MŞ",
+          category: storyToEdit.category || "",
+          tags: storyToEdit.tags || [],
+          imageUrl: storyToEdit.imageUrl || "",
+          readTime: storyToEdit.readTime || "",
+          featured: storyToEdit.featured || false,
+          published: storyToEdit.published || true
+        });
+        setShowStoryManagement(false); // Form görünümüne geç
+        setIsPreview(false); // Önizleme modundan çık
+      }
+    }
+  }, [editingStoryId, firebaseStories]);
+
   return (
     <AdminGuard>
       <Navigation onSearchOpen={() => setIsSearchModalOpen(true)} />
@@ -226,7 +252,9 @@ export default function AddStory() {
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold mb-2">Yeni Hikaye Ekle</h1>
+                  <h1 className="text-3xl font-bold mb-2">
+                    {editingStoryId ? "Hikayeyi Düzenle" : "Yeni Hikaye Ekle"}
+                  </h1>
                   <p className="text-muted-foreground">
                     Admin paneli - Yeni hikaye oluşturun
                   </p>
@@ -288,15 +316,24 @@ export default function AddStory() {
                                   {story.views || 0} görüntülenme • {story.likes || 0} beğeni
                                 </p>
                               </div>
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={() => handleDeleteStory(story.id, story.title)}
-                                className="ml-4"
-                              >
-                                <Trash2 className="w-4 h-4 mr-2" />
-                                Sil
-                              </Button>
+                              <div className="flex gap-2 ml-4">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleEditStory(story.id)}
+                                >
+                                  <FileText className="w-4 h-4 mr-2" />
+                                  Düzenle
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={() => handleDeleteStory(story.id, story.title)}
+                                >
+                                  <Trash2 className="w-4 h-4 mr-2" />
+                                  Sil
+                                </Button>
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -480,7 +517,18 @@ export default function AddStory() {
 
                   {/* Submit Button */}
                   <div className="flex justify-end space-x-4">
-                    <Button type="button" variant="outline" onClick={() => setLocation('/')}>
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={() => {
+                        setLocation('/');
+                        setEditingStoryId(null); // İptal edildiğinde düzenleme modundan çık
+                        setFormData({ // Formu sıfırla
+                          title: "", excerpt: "", content: "", author: "Muhammet Şanci", authorInitials: "MŞ",
+                          category: "", tags: [], imageUrl: "", readTime: "", featured: false, published: true
+                        });
+                      }}
+                    >
                       İptal
                     </Button>
                     <Button 
@@ -489,7 +537,7 @@ export default function AddStory() {
                       size="lg"
                     >
                       <Save className="w-5 h-5 mr-2" />
-                      {isSubmitting ? "Kaydediliyor..." : "Hikayeyi Kaydet"}
+                      {isSubmitting ? "Kaydediliyor..." : (editingStoryId ? "Hikayeyi Güncelle" : "Hikayeyi Kaydet")}
                     </Button>
                   </div>
                 </form>
@@ -501,7 +549,7 @@ export default function AddStory() {
                       <div className="space-y-6">
                         {formData.imageUrl && (
                           <img 
-                            src={formData.imageUrl} 
+                            src={formData.imageUrl || "/placeholder.svg"} 
                             alt={formData.title}
                             className="w-full h-64 object-cover rounded-lg"
                           />
