@@ -33,3 +33,29 @@ jobs:
           name: Elektrik-Atolyesi-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+      - name: Allow emulator acceleration
+        run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - name: Android screen smoke check
+        uses: ReactiveCircus/android-emulator-runner@v2
+        continue-on-error: true
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          script: |
+            adb install app/build/outputs/apk/debug/app-debug.apk
+            adb shell am start -n com.msanc.elektrikatolyesi/.MainActivity
+            sleep 3
+            adb shell screencap -p /sdcard/atelier-home.png
+            adb pull /sdcard/atelier-home.png atelier-home.png
+            adb shell input tap 540 610
+            sleep 2
+            adb shell screencap -p /sdcard/atelier-lab.png
+            adb pull /sdcard/atelier-lab.png atelier-lab.png
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Elektrik-Atolyesi-ui-preview
+          path: atelier-*.png
+          if-no-files-found: ignore
