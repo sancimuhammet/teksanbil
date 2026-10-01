@@ -61,7 +61,7 @@ public final class CircuitBoard extends View {
         if(energized()){style(0x66FFB547,1);p.setShadowLayer(dp(30),0,0,ORANGE);c.drawCircle(lx,ly,dp(39),p);p.clearShadowLayer();}
         style(energized()?ORANGE:0xFF809BB5,3);p.setStyle(Paint.Style.STROKE);c.drawCircle(lx,ly,dp(29),p);p.setStyle(Paint.Style.FILL);
         line(c,lx-dp(13),ly-dp(9),lx+dp(13),ly+dp(9),energized()?ORANGE:WHITE,2);line(c,lx+dp(13),ly-dp(9),lx-dp(13),ly+dp(9),energized()?ORANGE:WHITE,2);
-        text(c,"AMPUL",lx,ly+dp(54),WHITE,11,true);
+        text(c,"AMPUL",lx-dp(57),ly+dp(5),WHITE,11,true);
     }
     private void drawPanel(Canvas c,float w,float h){
         box(c,dp(10),dp(42),w-dp(10),h-dp(50),0xFF1C3652,16);
@@ -70,7 +70,7 @@ public final class CircuitBoard extends View {
         drawContact(c,3,4,"START",startPressed,ORANGE);
         drawContact(c,8,9,"YARDIMCI",coil,CYAN);
         float cx=(px(5)+px(6))/2,cy=py(5);box(c,cx-dp(40),cy-dp(27),cx+dp(40),cy+dp(27),coil?0xFF186A67:0xFF304A68,13);
-        text(c,"KM1",cx,cy+dp(5),coil?CYAN:WHITE,18,true);text(c,"BOBİN",cx,cy+dp(50),WHITE,11,true);
+        text(c,"KM",cx,cy+dp(4),coil?CYAN:WHITE,11,true);text(c,"KM1 BOBİN",cx,cy+dp(50),WHITE,11,true);
         float mx=w*.49f,my=h*.84f;style(coil?CYAN:DIM,3);p.setStyle(Paint.Style.STROKE);c.drawCircle(mx,my,dp(20),p);p.setStyle(Paint.Style.FILL);text(c,"M",mx,my+dp(5),coil?CYAN:WHITE,15,true);
         if(coil){style(CYAN,2);c.save();c.rotate((System.currentTimeMillis()-started)%360,mx,my);for(int i=0;i<4;i++){c.drawLine(mx,my-dp(29),mx,my-dp(39),p);c.rotate(90,mx,my);}c.restore();}
         text(c,"MOTOR",mx,my+dp(43),WHITE,10,true);
