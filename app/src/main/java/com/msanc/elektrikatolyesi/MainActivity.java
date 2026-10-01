@@ -51,6 +51,7 @@ public class MainActivity extends Activity {
         page.addView(text("OYNA VE ÖĞREN",12,MUTED,true));gap(page,10);
         labCard("01  /  DC DEVRE","Ampulü yak","Pil • anahtar • ampul","Üç kabloyu bağlayıp yolu tamamla.",0xFFE3F6F0,()->showLab(false));
         labCard("02  /  KUMANDA","Motor panosunu kur","STOP • START • KM1","Yardımcı kontakla kendini tutan kumanda yap.",0xFFFFF0D9,()->showLab(true));
+        labCard("03  /  MÜHENDİSLİK","Kompanzasyonu ayarla","5 kademe • gerçek zamanlı cosφ","Kademeleri seçip hedef güç katsayısına ulaş.",0xFFE7EDF9,this::showCompensationLab);
         page.addView(text("MÜHENDİSLİK HARİTASI",12,MUTED,true));gap(page,10);LinearLayout c=card(page);label(c,"15 teknik konu","Devrelerden güç elektroniğine; kompanzasyon, kablo, trafo, PLC ve şebeke.");button(c,"Konuları keşfet  →",this::showAtlas);
     }
     void labCard(String eyebrow,String title,String tags,String detail,int color,Runnable action){LinearLayout c=card(page);c.setBackground(shape(color,20));c.addView(text(eyebrow,11,BLUE,true));gap(c,9);c.addView(text(title,21,NAVY,true));gap(c,4);c.addView(text(tags,13,BLUE,true));gap(c,7);c.addView(text(detail,14,MUTED,false));button(c,"Devreyi aç  →",action);}
@@ -62,6 +63,13 @@ public class MainActivity extends Activity {
         button(feedback,"Bağlantıları sıfırla",board::reset);LinearLayout tip=card(page);label(tip,"Nasıl oynanır?","Yuvarlak uçtan diğer uca parmağınla kablo sürükle. Yanlış kabloyu kaldırmak için aynı iki ucu tekrar birleştir. Anahtar ve butonlara dokunabilirsin.");
         button(page,panel?"Kumanda mantığını oku  →":"Devreyi öğren  →",()->showTopic(panel?5:0));
     }
+    void showCompensationLab(){tab=0;screen=9;shell("Kompanzasyon atölyesi","Kademeleri seç, güç üçgenini değiştir");
+        LinearLayout intro=card(page);label(intro,"GÖREV 03  ·  COSφ","100 kW endüktif yükün başlangıç cosφ değeri 0,75. Kondansatör kademelerine dokunarak cosφ değerini 0,92–0,95 aralığına getir. Aşırı kompanzasyona dikkat et.");
+        CompensationBoard board=new CompensationBoard(this);page.addView(board,new LinearLayout.LayoutParams(-1,dp(390)));gap(page,14);
+        LinearLayout feedback=card(page);TextView status=text("",16,NAVY,true);feedback.addView(status);
+        board.setListener((kvar,pf,solved)->{status.setText(solved?"Hedefte!  "+n(kvar)+" kvar ile cosφ "+n(pf):"Seçilen "+n(kvar)+" kvar  ·  cosφ "+n(pf));if(solved&&!prefs.getBoolean("lab_comp",false))prefs.edit().putBoolean("lab_comp",true).apply();});
+        button(feedback,"Kademeleri sıfırla",board::reset);LinearLayout note=card(page);label(note,"Neden bu kadar kvar?","Qc=P(tanφ1−tanφ2). Bu örnekte yaklaşık 50 kvar gerekir. Gerçek tesiste harmonikler, reaktör, akım trafosu ve kademe tasarımı ayrıca incelenir.");button(page,"Kompanzasyonu öğren  →",()->showTopic(4));
+    }
     void showAtlas(){tab=1;screen=2;shell("Konular","Temelden mühendislik uygulamalarına");LinearLayout intro=card(page);label(intro,"Öğrenme haritası","15 alandan istediğini seç. Konuyu oku, atölyede dene, ilgili hesap aracını kullan.");
         for(int i=0;i<Atlas.ALL.length;i++){final int index=i;Atlas.Topic topic=Atlas.ALL[i];LinearLayout c=card(page);label(c,topic.icon+"  "+topic.title,topic.summary);chip(c,topic.level+"  →");c.setOnClickListener(v->showTopic(index));}
     }
@@ -69,7 +77,7 @@ public class MainActivity extends Activity {
         LinearLayout concept=card(page);concept.addView(text("KAVRA",12,BLUE,true));gap(concept,10);concept.addView(text(topic.concept,16,NAVY,false));
         LinearLayout formula=card(page);formula.setBackground(shape(0xFFE2F7F1,20));formula.addView(text("TEMEL BAĞINTI",12,BLUE,true));gap(formula,9);formula.addView(text(topic.formula,19,NAVY,true));
         LinearLayout scenario=card(page);scenario.addView(text("UYGULAMADA DÜŞÜN",12,BLUE,true));gap(scenario,9);scenario.addView(text(topic.scenario,15,NAVY,false));
-        if(index==0)button(scenario,"Ampul atölyesi",()->showLab(false));if(index==5||index==11)button(scenario,"Pano atölyesi",()->showLab(true));
+        if(index==0)button(scenario,"Ampul atölyesi",()->showLab(false));if(index==4)button(scenario,"Kompanzasyon atölyesi",this::showCompensationLab);if(index==5||index==11)button(scenario,"Pano atölyesi",()->showLab(true));
         if(topic.tool>=0)button(scenario,"Hesap aracını aç",()->showCalculator(topic.tool));if(topic.route>=0)button(scenario,"Kısa görevler",()->showTrack(topic.route));button(page,"← Konular",this::showAtlas);
     }
     void showTrack(int track){tab=1;screen=4;activeTrack=track;shell(Lessons.TRACKS[track],Lessons.DESCRIPTIONS[track]);for(int i=0;i<Lessons.ALL.length;i++){if(Lessons.ALL[i].track!=track)continue;final int index=i;LinearLayout c=card(page);label(c,(prefs.getBoolean("l"+i,false)?"✓  ":"○  ")+Lessons.ALL[i].title,Lessons.ALL[i].body);chip(c,prefs.getBoolean("l"+i,false)?"Tamamlandı":"Görevi aç →");c.setOnClickListener(v->showLesson(index));}button(page,"← Tüm rotalar",this::showHome);}
@@ -110,6 +118,6 @@ public class MainActivity extends Activity {
         {"Kompanzasyon","Qc=P(tanφ1−tanφ2). Harmonik/rezo­nans ve otomatik kademe tasarımı ayrı değerlendirilir.","https://www.electrical-installation.org/enwiki/Theoretical_principles_to_improve_power_factor"},
         {"Gerilim düşümü ve koruma","İletken R, X ve faz sayısı; kısa devre termik dayanım formülleri. Besleme ve açma koşulları ayrıca doğrulanır.","https://www.electrical-installation.org/enwiki/Calculation_of_voltage_drop_in_steady_load_conditions"},
         {"Harmonikler","Kondansatör bankında rezonans ve nötr akımı önemli olabilir.","https://www.electrical-installation.org/enwiki/Risk_of_resonance_due_to_power-system_harmonics"}
-    };for(String[] row:sources){LinearLayout c=card(page);label(c,row[0],row[1]);chip(c,row[2]);}LinearLayout about=card(page);label(about,"Sürüm 0.2","İki oynanabilir atölye, 15 konu, 24 kısa görev ve 6 hesap aracı. İlerleme cihazda saklanır. MSANC Studio.");}
+    };for(String[] row:sources){LinearLayout c=card(page);label(c,row[0],row[1]);chip(c,row[2]);}LinearLayout about=card(page);label(about,"Sürüm 0.3","Üç oynanabilir atölye, 15 konu, 24 kısa görev ve 6 hesap aracı. İlerleme cihazda saklanır. MSANC Studio.");}
     @Override public void onBackPressed(){if(screen==3)showAtlas();else if(screen==5)showTrack(activeTrack);else if(screen==7)showTools();else if(screen==4)showAtlas();else showHome();}
 }

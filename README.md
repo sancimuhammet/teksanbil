@@ -1,11 +1,12 @@
 # Elektrik Atölyesi
 
-MSANC Studio için çevrimdışı çalışan Android eğitim uygulaması. Sürüm 0.2: dokunarak kablo bağlanan iki animasyonlu atölye, 15 konuluk öğrenme haritası, altı rotada 24 kısa görev ve altı mühendislik ön hesap aracı. İlerleme yalnızca cihazda tutulur. Uygulamada hesap, reklam veya internet izni yoktur.
+MSANC Studio için çevrimdışı çalışan Android eğitim uygulaması. Sürüm 0.3: dokunarak kablo bağlanan iki animasyonlu atölye, kademeli kompanzasyon oyunu, 15 konuluk öğrenme haritası, altı rotada 24 kısa görev ve altı mühendislik ön hesap aracı. İlerleme yalnızca cihazda tutulur. Uygulamada hesap, reklam veya internet izni yoktur.
 
 ## Kapsam
 
 - Ampul atölyesi: pil, anahtar ve ampul uçlarını sürükleyerek bağla; anahtara dokununca kapalı devrede ampul ve akım animasyonu çalışır. Ampulü atlayan doğrudan kısa bağlantı algılanır.
 - Kumanda panosu atölyesi: STOP, START, KM1 bobin ve yardımcı kontaktan kilitlemeli kumanda devresi kur; motor dönüş animasyonu ve STOP ile bırakma. Kavramsal 24 V simülasyonudur.
+- Kompanzasyon atölyesi: 100 kW / cosφ=0,75 yükte 5, 10, 10, 20 ve 25 kvar kademeleri seçerek hedef 0,92–0,95 aralığına ulaş; güç üçgeni anlık güncellenir.
 - 15 konu: devre temelleri, AC, üç faz, kablo, kompanzasyon, motor kumandası, trafo, koruma, güç elektroniği, analog ve dijital elektronik, PLC, ölçüm, yenilenebilir enerji, şebeke/proje.
 - Temel elektrik; AC ve üç faz; kablolar ve koruma; kompanzasyon; makineler; güç sistemleri için 24 kısa görev.
 - Yük akımı (1/3 faz), kompanzasyon kvar, kablo akım taşıma, gerilim düşümü, adyabatik kısa devre kesiti, trafo nominal akımı ve yaklaşık trafo uçları kısa devre akımı.

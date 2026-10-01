@@ -49,13 +49,13 @@ jobs:
             sleep 3
             adb shell screencap -p /sdcard/atelier-home.png
             adb pull /sdcard/atelier-home.png atelier-home.png
-            adb shell input tap 540 760
+            adb shell input tap 540 900
             sleep 2
             adb shell screencap -p /sdcard/atelier-lab.png
             adb pull /sdcard/atelier-lab.png atelier-lab.png
             adb shell input keyevent 4
             sleep 1
-            adb shell input tap 540 1740
+            adb shell input tap 540 2050
             sleep 2
             adb shell screencap -p /sdcard/atelier-panel.png
             adb pull /sdcard/atelier-panel.png atelier-panel.png
