@@ -83,12 +83,14 @@ public final class CircuitBoard extends View {
     private boolean near(float x,float y,int a,int b){float cx=(px(a)+px(b))/2,cy=py(a);return Math.abs(x-cx)<dp(30)&&Math.abs(y-cy)<dp(28);}
     @Override public boolean onTouchEvent(MotionEvent event){float x=event.getX(),y=event.getY();switch(event.getActionMasked()){
         case MotionEvent.ACTION_DOWN:
+            if(getParent()!=null)getParent().requestDisallowInterceptTouchEvent(true);
             int hit=terminal(x,y);if(hit>=0){selected=hit;dragX=x;dragY=y;invalidate();return true;}
             if(panel){if(near(x,y,1,2)){stopClosed=!stopClosed;if(!stopClosed)coil=false;notifyState();return true;}if(near(x,y,3,4)){startPressed=!startPressed;notifyState();return true;}}
             else if(near(x,y,1,2)){switchClosed=!switchClosed;notifyState();return true;}
             return true;
         case MotionEvent.ACTION_MOVE:if(selected>=0){dragX=x;dragY=y;invalidate();}return true;
-        case MotionEvent.ACTION_UP:if(selected>=0){int end=terminal(x,y);if(end>=0&&end!=selected){String wire=key(selected,end);if(!wires.add(wire))wires.remove(wire);selected=-1;notifyState();}else{selected=-1;invalidate();}}return true;
+        case MotionEvent.ACTION_UP:if(selected>=0){int end=terminal(x,y);if(end>=0&&end!=selected){String wire=key(selected,end);if(!wires.add(wire))wires.remove(wire);selected=-1;notifyState();}else{selected=-1;invalidate();}}if(getParent()!=null)getParent().requestDisallowInterceptTouchEvent(false);return true;
+        case MotionEvent.ACTION_CANCEL:selected=-1;invalidate();if(getParent()!=null)getParent().requestDisallowInterceptTouchEvent(false);return true;
         default:return true;
     }}
     public void reset(){wires.clear();selected=-1;switchClosed=false;startPressed=false;stopClosed=true;coil=false;notifyState();}
