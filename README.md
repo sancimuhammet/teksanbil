@@ -1,12 +1,16 @@
 # Elektrik Atölyesi
 
-MSANC Studio için çevrimdışı çalışan Android eğitim uygulaması. Altı rotada 24 etkileşimli görev ve altı mühendislik ön hesap aracı içerir. İlerleme yalnızca cihazdaki SharedPreferences alanında tutulur. Uygulamada hesap, reklam veya internet izni yoktur.
+MSANC Studio için çevrimdışı çalışan Android eğitim uygulaması. Sürüm 0.2: dokunarak kablo bağlanan iki animasyonlu atölye, 15 konuluk öğrenme haritası, altı rotada 24 kısa görev ve altı mühendislik ön hesap aracı. İlerleme yalnızca cihazda tutulur. Uygulamada hesap, reklam veya internet izni yoktur.
 
 ## Kapsam
 
-- Temel elektrik; AC ve üç faz; kablolar ve koruma; kompanzasyon; makineler; güç sistemleri.
+- Ampul atölyesi: pil, anahtar ve ampul uçlarını sürükleyerek bağla; anahtara dokununca kapalı devrede ampul ve akım animasyonu çalışır. Ampulü atlayan doğrudan kısa bağlantı algılanır.
+- Kumanda panosu atölyesi: STOP, START, KM1 bobin ve yardımcı kontaktan kilitlemeli kumanda devresi kur; motor dönüş animasyonu ve STOP ile bırakma. Kavramsal 24 V simülasyonudur.
+- 15 konu: devre temelleri, AC, üç faz, kablo, kompanzasyon, motor kumandası, trafo, koruma, güç elektroniği, analog ve dijital elektronik, PLC, ölçüm, yenilenebilir enerji, şebeke/proje.
+- Temel elektrik; AC ve üç faz; kablolar ve koruma; kompanzasyon; makineler; güç sistemleri için 24 kısa görev.
 - Yük akımı (1/3 faz), kompanzasyon kvar, kablo akım taşıma, gerilim düşümü, adyabatik kısa devre kesiti, trafo nominal akımı ve yaklaşık trafo uçları kısa devre akımı.
 - Yanlış yanıtta tekrar deneme, doğru yanıtta 10 XP ve yerel ilerleme kaydı.
+- Android 15 ve eski sürümlerde sistem çubuklarının iç boşluğu uygulanır; uygulama alt gezinmesi telefon tuşlarının üzerinde kalır.
 
 ## Hesap varsayımları
 
@@ -35,4 +39,4 @@ GitHub → **Actions** → **Android APK** → son başarılı çalıştırma �
 
 Yerel derleme: JDK 17 ve Android SDK ile Gradle 8.9 üzerinde `gradle :app:assembleDebug`. Formül testleri: `javac -d out app/src/main/java/com/msanc/elektrikatolyesi/Engineering.java tests/EngineeringTest.java && java -cp out EngineeringTest`.
 
-Bu ilk sürümün sonraki içerik hedefleri: interaktif devre simülasyonu, kompanzasyon kademe simülatörü, kablo döşeme yöntemlerinin genişletilmesi, koruma eğrileri, ölçüm senaryoları ve mühendis incelemesi. Genişletilmeden önce kaynak ve örnek çözüm kontrolü gereklidir.
+Bu atölyeler belirli görevlerin bağlantı mantığını simüle eder; genel amaçlı SPICE devre çözücüsü değildir. Sonraki hedefler: serbest devre kurma, değişken direnç/ölçü aleti, kompanzasyon kademe simülasyonu, kablo döşeme yöntemlerinin genişletilmesi, koruma eğrileri, ölçüm senaryoları ve mühendis incelemesi. Genişletilmeden önce kaynak ve örnek çözüm kontrolü gereklidir.
