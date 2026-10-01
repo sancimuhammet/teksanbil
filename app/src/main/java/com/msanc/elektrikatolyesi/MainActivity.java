@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
     private int tab=0;
     private int screen=0,activeTrack=0;
     private final String[] tools={"Güç ve akım", "Kompanzasyon", "Kablo kapasitesi", "Gerilim düşümü", "Kısa devre kesiti", "Trafo ve Ik"};
-    @Override public void onCreate(Bundle state) { super.onCreate(state); prefs=getSharedPreferences("progress",MODE_PRIVATE); getWindow().setStatusBarColor(NAVY); getWindow().setNavigationBarColor(NAVY); showHome(); }
+    @Override public void onCreate(Bundle state) { super.onCreate(state); prefs=getSharedPreferences("progress",MODE_PRIVATE); getWindow().setStatusBarColor(NAVY); getWindow().setNavigationBarColor(NAVY); String destination=getIntent().getStringExtra("destination"); if("lamp".equals(destination))showLab(false);else if("panel".equals(destination))showLab(true);else if("comp".equals(destination))showCompensationLab();else showHome(); }
     int dp(float v){return (int)(getResources().getDisplayMetrics().density*v+.5f);}
     GradientDrawable shape(int color,int radius){GradientDrawable d=new GradientDrawable();d.setColor(color);d.setCornerRadius(dp(radius));return d;}
     LinearLayout column(){LinearLayout l=new LinearLayout(this);l.setOrientation(1);return l;}

@@ -51,8 +51,9 @@ jobs:
             sleep 2
             adb shell screencap -p /sdcard/atelier-home.png
             adb pull /sdcard/atelier-home.png atelier-home.png
-            adb shell input tap 540 900
-            sleep 8
+            adb shell am force-stop com.msanc.elektrikatolyesi
+            adb shell am start -n com.msanc.elektrikatolyesi/.MainActivity --es destination lamp
+            sleep 4
             adb shell screencap -p /sdcard/atelier-lab.png
             adb pull /sdcard/atelier-lab.png atelier-lab.png
             adb shell input swipe 184 1112 430 1026 450
@@ -62,10 +63,9 @@ jobs:
             sleep 1
             adb shell screencap -p /sdcard/atelier-lamp-lit.png
             adb pull /sdcard/atelier-lamp-lit.png atelier-lamp-lit.png
-            adb shell input keyevent 4
-            sleep 1
-            adb shell input tap 540 2050
-            sleep 8
+            adb shell am force-stop com.msanc.elektrikatolyesi
+            adb shell am start -n com.msanc.elektrikatolyesi/.MainActivity --es destination panel
+            sleep 4
             adb shell screencap -p /sdcard/atelier-panel.png
             adb pull /sdcard/atelier-panel.png atelier-panel.png
             adb shell input swipe 154 1026 382 1026 450
@@ -79,6 +79,11 @@ jobs:
             sleep 1
             adb shell screencap -p /sdcard/atelier-panel-running.png
             adb pull /sdcard/atelier-panel-running.png atelier-panel-running.png
+            adb shell am force-stop com.msanc.elektrikatolyesi
+            adb shell am start -n com.msanc.elektrikatolyesi/.MainActivity --es destination comp
+            sleep 4
+            adb shell screencap -p /sdcard/atelier-comp.png
+            adb pull /sdcard/atelier-comp.png atelier-comp.png
       - uses: actions/upload-artifact@v4
         if: always()
         with:
