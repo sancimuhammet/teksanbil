@@ -55,12 +55,30 @@ jobs:
             sleep 2
             adb shell screencap -p /sdcard/atelier-lab.png
             adb pull /sdcard/atelier-lab.png atelier-lab.png
+            adb shell input swipe 184 1112 430 1026 450
+            adb shell input swipe 648 1026 876 1146 450
+            adb shell input swipe 876 1502 184 1500 450
+            adb shell input tap 540 1026
+            sleep 1
+            adb shell screencap -p /sdcard/atelier-lamp-lit.png
+            adb pull /sdcard/atelier-lamp-lit.png atelier-lamp-lit.png
             adb shell input keyevent 4
             sleep 1
             adb shell input tap 540 2050
             sleep 2
             adb shell screencap -p /sdcard/atelier-panel.png
             adb pull /sdcard/atelier-panel.png atelier-panel.png
+            adb shell input swipe 154 1026 382 1026 450
+            adb shell input swipe 532 1026 718 1026 450
+            adb shell input swipe 866 1026 858 1568 450
+            adb shell input swipe 688 1568 154 1570 450
+            adb shell input swipe 532 1026 382 1278 450
+            adb shell input swipe 532 1278 858 1568 450
+            adb shell input tap 792 1026
+            adb shell input tap 792 1026
+            sleep 1
+            adb shell screencap -p /sdcard/atelier-panel-running.png
+            adb pull /sdcard/atelier-panel-running.png atelier-panel-running.png
       - uses: actions/upload-artifact@v4
         if: always()
         with:
