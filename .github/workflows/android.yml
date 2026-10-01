@@ -45,10 +45,10 @@ jobs:
           profile: pixel_6
           script: |
             adb install app/build/outputs/apk/debug/app-debug.apk
-            adb shell input keyevent 82
-            sleep 10
+            adb shell am force-stop com.android.launcher3
+            adb shell am force-stop com.google.android.apps.nexuslauncher
             adb shell am start -n com.msanc.elektrikatolyesi/.MainActivity
-            sleep 8
+            sleep 2
             adb shell screencap -p /sdcard/atelier-home.png
             adb pull /sdcard/atelier-home.png atelier-home.png
             adb shell input tap 540 900
