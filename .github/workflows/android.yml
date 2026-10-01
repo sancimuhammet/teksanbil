@@ -18,7 +18,9 @@ jobs:
         with:
           gradle-version: '8.9'
       - name: Install Android platform
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        run: |
+          SDK_TOOL=$(find /usr/local/lib/android/sdk/cmdline-tools -type f -name sdkmanager | head -n 1)
+          "$SDK_TOOL" "platforms;android-35" "build-tools;35.0.0"
       - name: Core formula tests
         run: |
           mkdir -p /tmp/elektrik-test
