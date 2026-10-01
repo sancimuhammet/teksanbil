@@ -49,10 +49,16 @@ jobs:
             sleep 3
             adb shell screencap -p /sdcard/atelier-home.png
             adb pull /sdcard/atelier-home.png atelier-home.png
-            adb shell input tap 540 610
+            adb shell input tap 540 760
             sleep 2
             adb shell screencap -p /sdcard/atelier-lab.png
             adb pull /sdcard/atelier-lab.png atelier-lab.png
+            adb shell input keyevent 4
+            sleep 1
+            adb shell input tap 540 1740
+            sleep 2
+            adb shell screencap -p /sdcard/atelier-panel.png
+            adb pull /sdcard/atelier-panel.png atelier-panel.png
       - uses: actions/upload-artifact@v4
         if: always()
         with:
