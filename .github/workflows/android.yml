@@ -40,13 +40,22 @@ jobs:
         continue-on-error: true
         with:
           api-level: 35
-          target: google_apis
+          target: default
           arch: x86_64
           profile: pixel_6
           script: |
             adb install app/build/outputs/apk/debug/app-debug.apk
+            adb shell input keyevent 82
+            sleep 10
             adb shell am start -n com.msanc.elektrikatolyesi/.MainActivity
-            sleep 3
+            sleep 8
+            adb shell uiautomator dump /sdcard/view.xml >/dev/null || true
+            if adb shell cat /sdcard/view.xml | grep -q 'responding'; then
+              adb shell input tap 340 1230
+              sleep 3
+              adb shell am start -n com.msanc.elektrikatolyesi/.MainActivity
+              sleep 3
+            fi
             adb shell screencap -p /sdcard/atelier-home.png
             adb pull /sdcard/atelier-home.png atelier-home.png
             adb shell input tap 540 900
